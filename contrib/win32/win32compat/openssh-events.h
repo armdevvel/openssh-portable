@@ -108,9 +108,9 @@ McGenEventEnabled(
 #if !defined(MCGEN_CONTROL_CALLBACK)
 #define MCGEN_CONTROL_CALLBACK
 
-DECLSPEC_NOINLINE __inline
+//DECLSPEC_NOINLINE __inline
 VOID
-__stdcall
+//__stdcall
 McGenControlCallbackV2(
     _In_ LPCGUID SourceId,
     _In_ ULONG ControlCode,
@@ -281,8 +281,8 @@ EXTERN_C __declspec(selectany) REGHANDLE OpenSSHHandle = (REGHANDLE)0;
 
 #if !defined(McGenEventRegisterUnregister)
 #define McGenEventRegisterUnregister
-DECLSPEC_NOINLINE __inline
-ULONG __stdcall
+//DECLSPEC_NOINLINE __inline
+ULONG //__stdcall
 McGenEventRegister(
     _In_ LPCGUID ProviderId,
     _In_opt_ PENABLECALLBACK EnableCallback,
@@ -326,8 +326,8 @@ Remarks:
 }
 
 
-DECLSPEC_NOINLINE __inline
-ULONG __stdcall
+//DECLSPEC_NOINLINE __inline
+ULONG //__stdcall
 McGenEventUnregister(_Inout_ PREGHANDLE RegHandle)
 /*++
 
@@ -458,7 +458,7 @@ Remarks:
 //
 #ifndef Template_zz_def
 #define Template_zz_def
-ETW_INLINE
+//ETW_INLINE
 ULONG
 Template_zz(
     _In_ REGHANDLE RegHandle,
