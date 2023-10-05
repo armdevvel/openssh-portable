@@ -188,32 +188,6 @@ nanosleep(const struct timespec *req, struct timespec *rem)
 	}
 }
 
-/* This routine is contributed by  * Author: NoMachine <developers@nomachine.com>
- * Copyright (c) 2009, 2010 NoMachine
- * All rights reserved
- */
-static int
-gettimeofday(struct timeval *tv, void *tz)
-{
-	union {
-		FILETIME ft;
-		unsigned long long ns;
-	} timehelper;
-	unsigned long long us;
-
-	/* Fetch time since Jan 1, 1601 in 100ns increments */
-	GetSystemTimeAsFileTime(&timehelper.ft);	
-
-	/* Remove the epoch difference & convert 100ns to us */
-	us = (timehelper.ns - EPOCH_DELTA) / 10;
-
-	/* Stuff result into the timeval */
-	tv->tv_sec = (long)(us / USEC_IN_SEC);
-	tv->tv_usec = (long)(us % USEC_IN_SEC);
-
-	return 0;
-}
-
 static void
 explicit_bzero(void *b, size_t len)
 {
