@@ -16,6 +16,9 @@ wingw_linker_caveats = ['-Wl,--allow-multiple-definition']
 # porter's assumptions
 add_global_arguments('-DGSSAPI', language: 'c')
 
+# supply chain
+add_global_arguments('-DWITH_OPENSSL=1', language: 'c')
+
 # debugging
 add_global_arguments('-DSTDERR_LOG_LEVEL=SYSLOG_LEVEL_INFO', language: 'c')
 
@@ -23,6 +26,7 @@ add_global_arguments('-DSTDERR_LOG_LEVEL=SYSLOG_LEVEL_INFO', language: 'c')
 common_header_dir = 'contrib/win32/openssh'
 win32iocompat_dir = 'contrib/win32/win32compat'
 win32iocompat_inc = win32iocompat_dir + '/inc'
+openbsdcompat_dir = 'openbsd-compat'
 
 subdir(win32iocompat_dir)
 
@@ -38,6 +42,16 @@ lib_win32io = shared_library('win32iocompat', win32iocompat_srcs,
         '-luserenv',
         '-lntoskrnl',
     ])
+
+subdir(openbsdcompat_dir)
+
+dep_openssl = dependency('openssl', method: 'pkg-config')
+
+lib_openbsd = shared_library('openbsdcompat', openbsdcompat_srcs + files('hash.c'),
+    include_directories: [win32iocompat_inc],
+    link_with: [lib_win32io],
+    dependencies: [dep_openssl],
+    link_args: wingw_linker_caveats + ['-lws2_32'])
 
 # lib_logging = shared_library('logging', ['log.c', 'fatal.c'],
 #     include_directories: win32iocompat_inc,
