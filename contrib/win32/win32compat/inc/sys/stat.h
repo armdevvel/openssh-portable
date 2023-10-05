@@ -1,6 +1,7 @@
 #pragma once
 #include "types.h"
 #include_next <sys/stat.h>
+#include <direct.h> // declare single-arg mkdir
 
 #define _S_IFLNK  0xA000 // symbolic link
 #define _S_IFSOCK 0xC000 // socket
