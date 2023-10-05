@@ -43,6 +43,10 @@
 #define INTERNAL_RECV_BUFFER_SIZE 70*1024 //70KB
 #define errno_from_WSALastError() errno_from_WSAError(WSAGetLastError())
 
+VERSIONHELPERAPI IsWindows8OrGreater(void) {
+	return TRUE; // strangely missing from mingw-provided libraries
+}
+
 /* state info that needs to be persisted for an inprocess acceptEx call*/
 struct acceptEx_context {
 	char lpOutputBuf[1024];
