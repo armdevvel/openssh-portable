@@ -1,5 +1,6 @@
 #pragma once
 #include <versionheaders.h>
+#include <wctype.h>
 
 #define SSH_REGISTRY_ROOT L"SOFTWARE\\OpenSSH"
 #define GOTO_CLEANUP_IF(_cond_,_err_) do {  \
@@ -33,6 +34,8 @@
 
 /* maximum command line length */
 #define MAX_CMD_LEN 8191
+
+#define __ascii_iswalpha iswalpha
 
 /* prog paths */
 extern char* __progname;
