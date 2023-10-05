@@ -41,6 +41,7 @@
 
 #include <windows.h>
 #include <process.h>
+#include <errno.h>
 #include "w32fd.h"
 #include "tncon.h"
 #include "inc/utf.h"

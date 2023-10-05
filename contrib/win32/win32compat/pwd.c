@@ -40,6 +40,7 @@
 #include <dsgetdc.h>
 #define SECURITY_WIN32
 #include <security.h>
+#include <errno.h>
 
 #include "inc/pwd.h"
 #include "inc/grp.h"

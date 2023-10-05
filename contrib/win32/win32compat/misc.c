@@ -44,6 +44,7 @@
 #include <security.h>
 #include <ntstatus.h>
 #include <malloc.h>
+#include <errno.h>
 
 #include "inc/unistd.h"
 #include "inc/sys/stat.h"

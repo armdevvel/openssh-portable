@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <process.h>
+#include <errno.h>
 #include "misc_internal.h"
 
 /* child processes */

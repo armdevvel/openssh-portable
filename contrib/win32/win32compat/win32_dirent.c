@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <errno.h>
 
 #include "inc/utf.h"
 #include "inc/dirent.h"

@@ -36,6 +36,7 @@
 #include <windows.h>
 #include <conio.h>
 #include <io.h>
+#include <errno.h>
 
 #include "Debug.h"
 #include "console.h"
