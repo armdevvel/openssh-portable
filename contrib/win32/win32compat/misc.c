@@ -188,7 +188,7 @@ nanosleep(const struct timespec *req, struct timespec *rem)
 	}
 }
 
-static void
+void
 explicit_bzero(void *b, size_t len)
 {
 	SecureZeroMemory(b, len);
