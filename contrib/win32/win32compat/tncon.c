@@ -55,7 +55,7 @@ extern int ScrollBottom;
 unsigned char tmp_buf[30];
 
 /* terminal global switches*/
-TelParams Parameters = {
+static TelParams Parameters = {
 	0,		/* int fLogging */
 	NULL,		/* FILE *fplogfile */
 	NULL,		/* char *pInputFile */
