@@ -31,6 +31,7 @@
 #include <io.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <share.h>
 #include "inc/sys/stat.h"
 
 #include "inc/syslog.h"
