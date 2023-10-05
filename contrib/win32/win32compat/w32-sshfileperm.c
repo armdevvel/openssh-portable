@@ -76,7 +76,7 @@ check_secure_file_permission(const char *input_path, struct passwd * pw, int rea
 	if ((error_code = GetNamedSecurityInfoW(path_utf16, SE_FILE_OBJECT,
 		OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
 		&owner_sid, NULL, &dacl, NULL, &pSD)) != ERROR_SUCCESS) {
-		debug3("failed to retrieve the owner sid and dacl of file %S with error code: %d", path_utf16, error_code);
+		debug3("failed to retrieve the owner sid and dacl of file %S with error code: %lu", path_utf16, error_code);
 		errno = EOTHER;
 		ret = -1;
 		goto cleanup;
@@ -196,7 +196,7 @@ check_secure_folder_permission(const wchar_t* path_utf16, int read_ok)
 	if ((error_code = GetNamedSecurityInfoW(path_utf16, SE_FILE_OBJECT,
 		OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
 		&owner_sid, NULL, &dacl, NULL, &pSD)) != ERROR_SUCCESS) {
-		printf("failed to retrieve the owner sid and dacl of file %S with error code: %d", path_utf16, error_code);
+		printf("failed to retrieve the owner sid and dacl of file %S with error code: %lu", path_utf16, error_code);
 		errno = EOTHER;
 		ret = -1;
 		goto cleanup;
