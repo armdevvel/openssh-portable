@@ -10,11 +10,12 @@
 #include <direct.h>
 #include <io.h>
 #include <fcntl.h>
-#include "misc_internal.h"
+
+#define MAX_PATH 260
 
 struct dirent {
 	int            d_ino;       /* Inode number */
-	char           d_name[PATH_MAX]; /* Null-terminated filename */
+	char           d_name[MAX_PATH]; /* Null-terminated filename */
 };
 
 typedef struct DIR_ DIR;
