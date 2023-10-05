@@ -1,0 +1,1 @@
+./contrib/win32/openssh/config.h.vs
