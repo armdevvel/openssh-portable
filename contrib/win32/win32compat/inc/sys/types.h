@@ -1,6 +1,5 @@
 #define __STDC__ 1
-#include "..\crtheaders.h"
-#include SYS_TYPES_H
+#include_next <sys/types.h>
 
 typedef _dev_t dev_t;
 typedef long long off_t;

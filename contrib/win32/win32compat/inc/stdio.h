@@ -1,5 +1,4 @@
-#include "crtheaders.h"
-#include STDIO_H
+#include_next <stdio.h>
 
 /* stdio.h overrides */
 FILE* w32_fopen_utf8(const char *, const char *);

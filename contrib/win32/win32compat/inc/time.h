@@ -1,5 +1,4 @@
-#include "crtheaders.h"
-#include TIME_H
+#include_next <time.h>
 
 #define localtime w32_localtime
 #define ctime w32_ctime

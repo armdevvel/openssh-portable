@@ -1,5 +1,4 @@
-#include "crtheaders.h"
-#include STRING_H
+#include_next <string.h>
 #include "utf.h"
 
 /* string.h overrides */

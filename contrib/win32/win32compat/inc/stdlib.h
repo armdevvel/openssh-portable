@@ -1,5 +1,4 @@
-#include "crtheaders.h"
-#include STDLIB_H
+#include_next "stdlib.h"
 
 #define environ _environ
 void freezero(void *, size_t);

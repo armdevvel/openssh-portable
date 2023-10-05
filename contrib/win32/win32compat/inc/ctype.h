@@ -1,5 +1,4 @@
-#include "crtheaders.h"
-#include CTYPE_H
+#include_next "ctype.h"
 
 #define isascii __isascii
 
