@@ -1125,7 +1125,7 @@ cleanup:
 	return ret;
 }
 
-#include "inc\spawn.h"
+#include "inc/spawn.h"
 
 /* structures defining binary layout of fd info to be transmitted between parent and child processes*/
 struct std_fd_state {

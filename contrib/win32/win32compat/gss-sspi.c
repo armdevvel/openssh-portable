@@ -47,9 +47,9 @@
  * Include the definitions necessary to implement some of the interface
  * structure that are required for gss-serv.c to perform Kerberos operations.
  */
-#include "..\..\..\config.h"
+#include "config.h"
 #undef HAVE_GSSAPI_H
-#include "..\..\..\ssh-gss.h"
+#include "ssh-gss.h"
 
 /*
  * This will be initialized to a function table that contains pointers to 

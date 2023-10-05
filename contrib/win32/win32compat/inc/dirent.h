@@ -10,7 +10,7 @@
 #include <direct.h>
 #include <io.h>
 #include <fcntl.h>
-#include "..\misc_internal.h"
+#include "misc_internal.h"
 
 struct dirent {
 	int            d_ino;       /* Inode number */

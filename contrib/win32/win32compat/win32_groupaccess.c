@@ -45,10 +45,10 @@
 
 #define __attribute__(a)
 #include "inc/sys/types.h"
-#include "..\..\..\xmalloc.h"
-#include "..\..\..\groupaccess.h"
-#include "..\..\..\match.h"
-#include "..\..\..\log.h"
+#include "xmalloc.h"
+#include "groupaccess.h"
+#include "match.h"
+#include "log.h"
 
 #include "misc_internal.h"
 
