@@ -29,9 +29,9 @@
 */
 
 #include "signal_internal.h"
-#include "inc\sys\wait.h"
-#include "debug.h"
-#include "inc\signal.h"
+#include "inc/sys/wait.h"
+#include "Debug.h"
+#include "inc/signal.h"
 
 struct _children children;
 

@@ -28,15 +28,16 @@
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <Windows.h>
-#include <Sddl.h>
-#include <Aclapi.h>
+#include <windows.h>
+#include <sddl.h>
+#include <aclapi.h>
 #include <lm.h>
 #include <stdio.h> 
+#include <errno.h>
 
-#include "inc\pwd.h"
+#include "inc/pwd.h"
 #include "sshfileperm.h"
-#include "debug.h"
+#include "Debug.h"
 #include "misc_internal.h"
 #include "config.h"
 

@@ -29,16 +29,16 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#include "inc\sys\socket.h"
-#include "inc\sys\select.h"
-#include "inc\sys\uio.h"
-#include "inc\sys\types.h"
-#include "inc\sys\stat.h"
-#include "inc\unistd.h"
-#include "inc\fcntl.h"
-#include "inc\sys\un.h"
-#include "inc\utf.h"
-#include "inc\stdio.h"
+#include "inc/sys/socket.h"
+#include "inc/sys/select.h"
+#include "inc/sys/uio.h"
+#include "inc/sys/types.h"
+#include "inc/sys/stat.h"
+#include "inc/unistd.h"
+#include "inc/fcntl.h"
+#include "inc/sys/un.h"
+#include "inc/utf.h"
+#include "inc/stdio.h"
 
 #include "w32fd.h"
 #include "signal_internal.h"
@@ -48,10 +48,10 @@
 #include <assert.h>
 #include <direct.h>
 #include <winioctl.h>
-#include "Shlwapi.h"
-#include <sys\utime.h>
+#include "shlwapi.h"
+#include <sys/utime.h>
 #include "misc_internal.h"
-#include "debug.h"
+#include "Debug.h"
 
 /* internal table that stores the fd to w32_io mapping*/
 struct w32fd_table {

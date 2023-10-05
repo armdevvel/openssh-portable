@@ -28,7 +28,7 @@
 */
 
 #include "w32api_proxies.h"
-#include "debug.h"
+#include "Debug.h"
 #include "misc_internal.h"
 
 static wchar_t* 

@@ -33,34 +33,34 @@
 
 #define UMDF_USING_NTSTATUS 
 #define SECURITY_WIN32
-#include <Windows.h>
+#include <windows.h>
 #include <stdio.h>
 #include <time.h>
-#include <Shlwapi.h>
+#include <shlwapi.h>
 #include <conio.h>
-#include <LM.h>
-#include <Sddl.h>
-#include <Aclapi.h>
+#include <lm.h>
+#include <sddl.h>
+#include <aclapi.h>
 #include <security.h>
 #include <ntstatus.h>
 #include <malloc.h>
 
-#include "inc\unistd.h"
-#include "inc\sys\stat.h"
-#include "inc\sys\statvfs.h"
-#include "inc\sys\time.h"
+#include "inc/unistd.h"
+#include "inc/sys/stat.h"
+#include "inc/sys/statvfs.h"
+#include "inc/sys/time.h"
 #include "misc_internal.h"
-#include "inc\dlfcn.h"
-#include "inc\dirent.h"
-#include "inc\sys\types.h"
-#include "inc\sys\ioctl.h"
-#include "inc\fcntl.h"
-#include "inc\utf.h"
-#include "debug.h"
+#include "inc/dlfcn.h"
+#include "inc/dirent.h"
+#include "inc/sys/types.h"
+#include "inc/sys/ioctl.h"
+#include "inc/fcntl.h"
+#include "inc/utf.h"
+#include "Debug.h"
 #include "w32fd.h"
-#include "inc\string.h"
-#include "inc\time.h"
-#include "..\..\..\sshfileperm.h"
+#include "inc/string.h"
+#include "inc/time.h"
+#include "sshfileperm.h"
 
 #include <wchar.h>
 

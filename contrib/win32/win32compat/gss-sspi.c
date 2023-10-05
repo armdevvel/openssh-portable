@@ -28,10 +28,10 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "inc\utf.h"
-#include "inc\pwd.h"
-#include "debug.h"
-#include "inc\gssapi.h"
+#include "inc/utf.h"
+#include "inc/pwd.h"
+#include "Debug.h"
+#include "inc/gssapi.h"
 
  /*
   * This file provides the GSSAPI interface to support Kerberos SSPI within

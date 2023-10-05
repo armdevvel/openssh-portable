@@ -40,12 +40,12 @@
 #include <direct.h>
 
 #include "w32fd.h"
-#include "inc\utf.h"
-#include "inc\fcntl.h"
-#include "inc\pwd.h"
+#include "inc/utf.h"
+#include "inc/fcntl.h"
+#include "inc/pwd.h"
 #include "misc_internal.h"
-#include "debug.h"
-#include <Sddl.h>
+#include "Debug.h"
+#include <sddl.h>
 
 /* internal read buffer size */
 #define READ_BUFFER_SIZE 100*1024

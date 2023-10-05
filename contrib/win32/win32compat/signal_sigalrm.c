@@ -29,8 +29,8 @@
 */
 
 #include "signal_internal.h"
-#include "inc\signal.h"
-#include "debug.h"
+#include "inc/signal.h"
+#include "Debug.h"
 
 struct _timer_info timer_info;
 extern sigset_t pending_signals;

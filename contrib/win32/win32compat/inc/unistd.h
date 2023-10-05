@@ -5,7 +5,7 @@
 */
 #pragma once
 #include <stddef.h>
-#include "sys\types.h"
+#include "sys/types.h"
 #include "fcntl.h"
 #include "spawn.h"
 

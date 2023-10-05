@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include <Windows.h>
+#include <windows.h>
 #define SECURITY_WIN32
 #include <security.h>
-#include <Ntsecapi.h>
+#include <ntsecapi.h>
 
 BOOL pLogonUserExExW(wchar_t *, wchar_t *, wchar_t *, DWORD, DWORD, PTOKEN_GROUPS, PHANDLE, PSID *, PVOID *, LPDWORD, PQUOTA_LIMITS);
 BOOLEAN pTranslateNameW(LPCWSTR, EXTENDED_NAME_FORMAT, EXTENDED_NAME_FORMAT, LPWSTR, PULONG);

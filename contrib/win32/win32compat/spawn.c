@@ -3,9 +3,10 @@
 *
 * Implementation of POSIX spawn family of functions
 */
-#include <Windows.h>
-#include "inc\spawn.h"
-#include "inc\unistd.h"
+#include <windows.h>
+#include <errno.h>
+#include "inc/spawn.h"
+#include "inc/unistd.h"
 
 int
 posix_spawn_file_actions_init(posix_spawn_file_actions_t *file_actions)
