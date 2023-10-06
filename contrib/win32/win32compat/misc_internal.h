@@ -1,5 +1,5 @@
 #pragma once
-#include <versionheaders.h>
+#include "versionheaders.h"
 #include <wctype.h>
 
 #define SSH_REGISTRY_ROOT L"SOFTWARE\\OpenSSH"
