@@ -1747,8 +1747,14 @@
 #define HAVE_RSA_SET0_CRT_PARAMS 1
 #define HAVE_RSA_GET0_FACTORS 1
 #define HAVE_RSA_SET0_FACTORS 1
+#ifdef WITH_OPENSSL
+/* for newer APIs, see: https://github.com/openssl/openssl/issues/17369 */
+#define HAVE_EVP_CIPHER_CTX_IV 1
+#define HAVE_EVP_CIPHER_CTX_IV_NOCONST 1
+#else /* i.e. LibreSSL */
 #define HAVE_EVP_CIPHER_CTX_GET_IV 1
 #define HAVE_EVP_CIPHER_CTX_SET_IV 1
+#endif
 #define HAVE_DSA_SIG_GET0 1
 #define HAVE_DSA_SIG_SET0 1
 #define HAVE_ECDSA_SIG_GET0 1
