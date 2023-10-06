@@ -141,7 +141,7 @@
 #define ENABLE_SK
 
 /* Enable for built-in U2F/FIDO support */
-#define ENABLE_SK_INTERNAL
+/* #undef ENABLE_SK_INTERNAL */
 
 /* Define for discoverable credential support */
 #define HAVE_FIDO_CRED_PROT
