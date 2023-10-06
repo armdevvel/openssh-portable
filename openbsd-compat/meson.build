@@ -69,6 +69,7 @@ openbsdcompat_srcs = files(
     # missing source files in the solution
     'arc4random_uniform.c',
     'bsd-getentropy.c',
+    'bsd-timegm.c',
     # missing functions pulled from libssh body to prevent a dependency cycle
     'nonblock.c',
 )
