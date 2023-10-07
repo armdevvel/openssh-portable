@@ -1708,7 +1708,9 @@
 #include <signal.h>
 #include <io.h>
 
+#ifdef _MSC_VER
 #define __attribute__(A)
+#endif
 
 /* disable inclusion of compatability definitions in CRT headers */
 #define __STDC__ 1
