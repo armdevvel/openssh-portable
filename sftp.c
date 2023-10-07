@@ -70,9 +70,6 @@ typedef void EditLine;
 #include "sftp-common.h"
 #include "sftp-client.h"
 #include "sftp-usergroup.h"
-#ifdef WINDOWS
-#include "misc_internal.h"
-#endif // WINDOWS
 
 /* File to read commands from */
 FILE* infile;
