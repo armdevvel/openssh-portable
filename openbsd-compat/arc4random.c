@@ -52,7 +52,7 @@ int _ssh_compat_getentropy(void *, size_t);
 #ifdef getentropy
 # undef getentropy
 #endif
-#define getentropy(x, y) (_ssh_compat_getentropy((x), (y)))
+#define getentropy(x, y) (getrnd((x), (y)))
 
 #include "log.h"
 
@@ -74,34 +74,48 @@ int _ssh_compat_getentropy(void *, size_t);
 
 #define REKEY_BASE	(1024*1024) /* NB. should be a power of 2 */
 
+#ifndef FORK_NOT_SUPPORTED
 /* Marked MAP_INHERIT_ZERO, so zero'd out in fork children. */
+#endif
 static struct _rs {
 	size_t		rs_have;	/* valid bytes at end of rs_buf */
 	size_t		rs_count;	/* bytes till reseed */
-} *rs;
+} *rs = NULL;
 
+#ifndef FORK_NOT_SUPPORTED
 /* Maybe be preserved in fork children, if _rs_allocate() decides. */
+#endif
 static struct _rsx {
 	chacha_ctx	rs_chacha;	/* chacha context for random keystream */
 	u_char		rs_buf[RSBUFSZ];	/* keystream blocks */
-} *rsx;
+} *rsx = NULL;
 
 static inline int _rs_allocate(struct _rs **, struct _rsx **);
 static inline void _rs_forkdetect(void);
 #include "arc4random.h"
 
 static inline void _rs_rekey(u_char *dat, size_t datlen);
+static void getrnd(u_char *s, size_t len);
 
 static inline void
 _rs_init(u_char *buf, size_t n)
 {
 	if (n < KEYSZ + IVSZ)
 		return;
+
+	getrnd(buf, n);
+
+	if (rs == NULL) {
+		if (_rs_allocate(&rs, &rsx) == -1)
+			_exit(1);
+	}
+
+	chacha_keysetup(&rsx->rs_chacha, buf, KEYSZ * 8);
+	chacha_ivsetup(&rsx->rs_chacha, buf + KEYSZ);
 }
 
-#ifndef WITH_OPENSSL
 #ifdef WINDOWS
-#include <Wincrypt.h>
+#include <wincrypt.h>
 static void
 getrnd(u_char *s, size_t len) {
 	HCRYPTPROV hProvider;
@@ -109,9 +123,9 @@ getrnd(u_char *s, size_t len) {
 		CRYPT_VERIFYCONTEXT | CRYPT_SILENT) == FALSE ||
 	    CryptGenRandom(hProvider, len, s) == FALSE ||
 	    CryptReleaseContext(hProvider, 0) == FALSE)
-		fatal("%s Crypto error: %d", __func__, GetLastError());
+			fatal("%s Crypto error: %d", __func__, GetLastError());
 }
-
+	
 #else /* !WINDOWS */
 # ifndef SSH_RANDOM_DEV
 #  define SSH_RANDOM_DEV "/dev/urandom"
@@ -135,17 +149,9 @@ getrnd(u_char *s, size_t len)
 			return;
 		fatal("Couldn't open %s: %s", SSH_RANDOM_DEV,
 		    strerror(save_errno));
-
-	if (rs == NULL) {
-		if (_rs_allocate(&rs, &rsx) == -1)
-			_exit(1);
 	}
-
-	chacha_keysetup(&rsx->rs_chacha, buf, KEYSZ * 8);
-	chacha_ivsetup(&rsx->rs_chacha, buf + KEYSZ);
 }
 #endif /* !WINDOWS */
-#endif /* WITH_OPENSSL */
 
 static void
 _rs_stir(void)
@@ -153,8 +159,7 @@ _rs_stir(void)
 	u_char rnd[KEYSZ + IVSZ];
 	uint32_t rekey_fuzz = 0;
 
-	if (getentropy(rnd, sizeof rnd) == -1)
-		_getentropy_fail();
+	getentropy(rnd, sizeof rnd); /* terminates internally on failure */
 
 	if (!rs)
 		_rs_init(rnd, sizeof(rnd));
