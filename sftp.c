@@ -2432,7 +2432,7 @@ connect_to_server(char *path, char **args, int *in, int *out)
 		    posix_spawn_file_actions_adddup2(&actions, c_out, STDOUT_FILENO) != 0 ) 
 			fatal("posix_spawn initialization failed");
 		else if (posix_spawn((pid_t*)&sshpid, path, &actions, NULL, args, NULL) != 0) 
-			fatal("posix_spawn: %s", strerror(errno));
+			fatal("posix_spawn (%s): %s", path, strerror(errno));
 		
 		posix_spawn_file_actions_destroy(&actions);
 	}
