@@ -187,7 +187,7 @@ sftpsrc = files(
 subdir('contrib/win32/win32compat/ssh-agent')
 
 toolkit = [
-    ['keygen', winmain + files(
+    ['ssh-keygen', winmain + files(
         'ssh-keygen.c',
         'sshsig.c',
         'ssh-sk-client.c',
