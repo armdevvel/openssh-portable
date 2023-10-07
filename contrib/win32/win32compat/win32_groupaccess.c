@@ -42,6 +42,7 @@
 #include <security.h>
 #include <ntstatus.h>
 #include <stdio.h>
+#include <errno.h>
 
 #ifdef _MSC_VER
 #define __attribute__(a)

@@ -34,9 +34,10 @@
 #define __STDC__ 1
 #include <windows.h>
 #include <wchar.h>
-#include <Lm.h>
+#include <lm.h>
 #include <sddl.h>
 #include <stdio.h>
+#include <errno.h>
 
 #include "inc/utf.h"
 #include "misc_internal.h"
@@ -158,7 +159,7 @@ create_prgdata_ssh_folder()
 		swprintf_s(sshd_config_default_path, PATH_MAX, L"%S\\%s", __progdir, L"sshd_config_default");
 
 		if (CopyFileW(sshd_config_default_path, sshd_config_path, TRUE) == 0) {
-			printf("Failed to copy %S to %S, error:%d", sshd_config_default_path, sshd_config_path, GetLastError());
+			printf("Failed to copy %S to %S, error:%lu", sshd_config_default_path, sshd_config_path, GetLastError());
 			exit(255);
 		}
 	}

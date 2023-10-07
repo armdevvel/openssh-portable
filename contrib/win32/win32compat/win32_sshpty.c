@@ -2,11 +2,12 @@
  * Windows version of sshpty* routines in sshpty.c
  */
 
-
+#include "includes.h"
 
 #include <windows.h>
-#include "..\..\..\sshpty.h"
+#include "sshpty.h"
 #include "inc/unistd.h"
+#include "misc.h"
 #include "misc_internal.h"
 
 /* 
