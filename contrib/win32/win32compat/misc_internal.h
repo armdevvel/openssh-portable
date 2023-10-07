@@ -24,7 +24,7 @@
 #define errno_from_Win32LastError() errno_from_Win32Error(GetLastError())
 
 /* maximum potential size for paths when long paths are enabled */
-#define PATH_MAX 32768
+/* #define PATH_MAX 32768 */
 
 /* maximum size for user principal name as defined in ad schema */
 #define MAX_UPN_LEN 1024
