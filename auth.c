@@ -78,7 +78,6 @@
 
 #ifdef WINDOWS
 #include <windows.h>
-#include "misc_internal.h"
 #include "sshfileperm.h"
 #endif // WINDOWS
 
