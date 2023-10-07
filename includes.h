@@ -153,6 +153,10 @@
 
 #include <errno.h>
 
+#ifdef WINDOWS
+#include <process.h>
+#endif
+
 /*
  * On HP-UX 11.11, shadow.h and prot.h provide conflicting declarations
  * of getspnam when _INCLUDE__STDC__ is defined, so we unset it here.
