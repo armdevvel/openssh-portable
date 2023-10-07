@@ -1268,6 +1268,8 @@ fileio_symlink(const char *target, const char *linkpath)
 	DWORD ret = -1;
 	char target_modified[PATH_MAX] = { 0 };
 	char *linkpath_resolved = NULL, *target_resolved = NULL;
+	wchar_t *linkpath_utf16 = NULL;
+	wchar_t *resolved_target_utf16 = NULL;
 
 	if (target == NULL || linkpath == NULL) {
 		errno = EFAULT;
@@ -1301,8 +1303,8 @@ fileio_symlink(const char *target, const char *linkpath)
 		strcpy_s(target_modified, _countof(target_modified), target_resolved);
 	}
 
-	wchar_t *linkpath_utf16 = resolved_path_utf16(linkpath);
-	wchar_t *resolved_target_utf16 = utf8_to_utf16(target_modified);
+	linkpath_utf16 = resolved_path_utf16(linkpath);
+	resolved_target_utf16 = utf8_to_utf16(target_modified);
 	if (resolved_target_utf16 == NULL || linkpath_utf16 == NULL) {
 		errno = ENOMEM;
 		goto cleanup;
