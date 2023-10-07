@@ -396,7 +396,7 @@ do_cmd(char *program, char *host, char *remuser, int port, int subsystem,
 		    posix_spawn_file_actions_adddup2(&actions, pin[0], STDIN_FILENO) != 0 ||
 		    posix_spawn_file_actions_adddup2(&actions, pout[1], STDOUT_FILENO) != 0 )
 			fatal("posix_spawn initialization failed");
-		else if (posix_spawn(pid, args_dup.list[0], &actions, NULL, args_dup.list, NULL) != 0)
+		else if (posix_spawnp(pid, args_dup.list[0], &actions, NULL, args_dup.list, NULL) != 0)
 			fatal("posix_spawn (%s): %s", args_dup.list[0], strerror(errno));
 			
 			posix_spawn_file_actions_destroy(&actions);
@@ -528,7 +528,7 @@ do_cmd2(char *host, char *remuser, int port, char *cmd,
 		    posix_spawn_file_actions_adddup2(&actions, fdin, STDIN_FILENO) != 0 ||
 		    posix_spawn_file_actions_adddup2(&actions, fdout, STDOUT_FILENO) != 0 ) 
 			fatal("posix_spawn initialization failed");
-		else if (posix_spawn(&pid, args_dup.list[0], &actions, NULL, args_dup.list, NULL) != 0) 
+		else if (posix_spawnp(&pid, args_dup.list[0], &actions, NULL, args_dup.list, NULL) != 0) 
 			fatal("posix_spawn (%s): %s", args_dup.list[0], strerror(errno));
 
 		posix_spawn_file_actions_destroy(&actions);

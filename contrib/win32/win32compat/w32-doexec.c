@@ -492,7 +492,7 @@ int do_exec_windows(struct ssh *ssh, Session *s, const char *command, int pty) {
 			}
 		}
 
-		if (posix_spawn(&pid, spawn_argv[0], &actions, NULL, spawn_argv, NULL) != 0) {
+		if (posix_spawnp(&pid, spawn_argv[0], &actions, NULL, spawn_argv, NULL) != 0) {
 			errno = EOTHER;
 			error("posix_spawn (%s): %s", spawn_argv[0], strerror(errno));
 			goto cleanup;

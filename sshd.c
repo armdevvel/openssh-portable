@@ -1745,7 +1745,7 @@ server_accept_loop(int *sock_in, int *sock_out, int *newsock, int *config_s)
 				    posix_spawnattr_setpgroup(&attributes, 0) != 0)
 					error("posix_spawn initialization failed");
 				else {
-					if (posix_spawn(&pid, rexec_argv[0], &actions, &attributes, rexec_argv, NULL) != 0)
+					if (posix_spawnp(&pid, rexec_argv[0], &actions, &attributes, rexec_argv, NULL) != 0)
 						error("%s, posix_spawn (%s) failed", __func__, rexec_argv[0]);
 					posix_spawn_file_actions_destroy(&actions);
 					posix_spawnattr_destroy(&attributes);
