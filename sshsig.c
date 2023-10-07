@@ -37,6 +37,7 @@
 #endif
 #include "match.h"
 #include "digest.h"
+#include "xmalloc.h"
 
 #define SIG_VERSION		0x01
 #define MAGIC_PREAMBLE		"SSHSIG"
