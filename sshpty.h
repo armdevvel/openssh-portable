@@ -16,6 +16,8 @@
 
 #include <termios.h>
 
+struct passwd;
+
 struct termios *get_saved_tio(void);
 void	 leave_raw_mode(int);
 void	 enter_raw_mode(int);
