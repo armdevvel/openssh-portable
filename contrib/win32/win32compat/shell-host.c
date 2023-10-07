@@ -33,13 +33,13 @@
  */
 
 #include <windows.h>
-#include <Strsafe.h>
+#include <strsafe.h>
 #include <stdio.h>
 #include <io.h>
-#include <Shlobj.h>
+#include <shlobj.h>
 #include <sddl.h>
 #include <process.h>
-#include "misc_internal.h"
+#include "../misc_internal.h"
 #include "inc/utf.h"
 
 #define MAX_CONSOLE_COLUMNS 9999
