@@ -1,7 +1,7 @@
-#include <Windows.h>
+#include <windows.h>
 #include <stdio.h>
-#include "Debug.h"
-#include "misc_internal.h"
+#include "../Debug.h"
+#include "../misc_internal.h"
 
 #define MAX_MESSAGE_SIZE 256 * 1024
 

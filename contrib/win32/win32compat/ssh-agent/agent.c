@@ -31,8 +31,8 @@
 #include "config.h"
 #include "agent.h"
 #include <sddl.h>
-#include <UserEnv.h>
-#include "..\misc_internal.h"
+#include <userenv.h>
+#include "../misc_internal.h"
 #include <pwd.h>
 
 #define BUFSIZE 5 * 1024
@@ -76,7 +76,7 @@ iocp_work(LPVOID lpParam)
 	while (1) {
 		con = NULL;
 		p_ol = NULL;
-		if (GetQueuedCompletionStatus(ioc_port, &bytes, &(ULONG_PTR)con, &p_ol, INFINITE) == FALSE) {
+		if (GetQueuedCompletionStatus(ioc_port, &bytes, (ULONG_PTR*)&con, &p_ol, INFINITE) == FALSE) {
 			debug("iocp error: %d on %p", GetLastError(), con);
 			if (con)
 				agent_connection_on_error(con, GetLastError());
