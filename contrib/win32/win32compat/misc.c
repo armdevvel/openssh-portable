@@ -72,9 +72,15 @@ static char* s_programdir = NULL;
  */
 #define MAX_REPARSE_SIZE 17000 
 #define IO_REPARSE_TAG_SYMBOLIC_LINK IO_REPARSE_TAG_RESERVED_ZERO 
+#ifndef IO_REPARSE_TAG_MOUNT_POINT
 #define IO_REPARSE_TAG_MOUNT_POINT (0xA0000003L) /* winnt ntifs */
+#endif
+#ifndef IO_REPARSE_TAG_HSM
 #define IO_REPARSE_TAG_HSM (0xC0000004L) /* winnt ntifs */
+#endif
+#ifndef IO_REPARSE_TAG_SIS
 #define IO_REPARSE_TAG_SIS (0x80000007L) /* winnt ntifs */
+#endif
 #define REPARSE_MOUNTPOINT_HEADER_SIZE 8
 
  /* Difference in us between UNIX Epoch and Win32 Epoch */

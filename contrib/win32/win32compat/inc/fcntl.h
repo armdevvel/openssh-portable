@@ -43,8 +43,13 @@ void* w32_fd_to_handle(int fd);
 * - cross check conflict with common macros in Windows headers
 * - Ex. #define O_APPEND    0x8
 */
+#ifndef O_ACCMODE
 #define O_ACCMODE			0x0003
+#endif
+#ifndef O_NONBLOCK
 #define O_NONBLOCK			0x0004  /*io operations wont block*/
+#endif
+#ifndef S_IXUSR
 # define S_IXUSR			0000100	/* execute/search permission, */
 # define S_IXGRP			0000010	/* execute/search permission, */
 # define S_IXOTH			0000001	/* execute/search permission, */
@@ -58,6 +63,7 @@ void* w32_fd_to_handle(int fd);
 # define S_IRWXU			0000700	/* read, write, execute */
 # define S_IRWXG			0000070	/* read, write, execute */
 # define S_IRWXO			0000007	/* read, write, execute */
+#endif
 
 /* 
  * File types. Note that the values are different from similar variants 

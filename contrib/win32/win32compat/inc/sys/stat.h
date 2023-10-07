@@ -25,8 +25,18 @@
 
 struct w32_stat;
 
+#ifdef fstat
+/* fstat is defined as _fstat64 in mingw */
+#undef fstat
+#endif
+
 int w32_fstat(int fd, struct w32_stat *buf);
 #define fstat(a,b)	w32_fstat((a), (b))
+
+#ifdef stat
+/* stat is defined as _stat64 in mingw */
+#undef stat
+#endif
 
 int w32_stat(const char *path, struct w32_stat *buf);
 #define stat w32_stat
