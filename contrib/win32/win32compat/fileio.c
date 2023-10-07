@@ -153,7 +153,7 @@ fileio_connect(struct w32_io* pio, char* name)
 	} while(1);
 
 	if (h == INVALID_HANDLE_VALUE) {
-		debug3("unable to connect to pipe %ls, error: %d", name_w, GetLastError());
+		debug3("unable to connect to pipe %ls, error: %lu", name_w, GetLastError());
 		errno = errno_from_Win32LastError();
 		ret = -1;
 		goto cleanup;
@@ -162,7 +162,7 @@ fileio_connect(struct w32_io* pio, char* name)
 	if (SetHandleInformation(h, HANDLE_FLAG_INHERIT,
 	    pio->fd_flags & FD_CLOEXEC ? 0 : HANDLE_FLAG_INHERIT) == FALSE) {
 		errno = errno_from_Win32LastError();
-		debug3("SetHandleInformation failed, error = %d, pio = %p", GetLastError(), pio);
+		debug3("SetHandleInformation failed, error = %lu, pio = %p", GetLastError(), pio);
 		ret = -1;
 		goto cleanup;
 	}
@@ -392,7 +392,7 @@ createFile_flags_setup(int flags, mode_t mode, struct createFile_flags* cf_flags
 
 		swprintf_s(sddl, SDDL_LENGTH, L"O:%sD:PAI(A;;FA;;;BA)(A;;FA;;;SY)%s%s", sid_utf16, owner_ace, everyone_ace);
 		if (ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl, SDDL_REVISION, &pSD, NULL) == FALSE) {
-			debug3("ConvertStringSecurityDescriptorToSecurityDescriptorW failed with error code %d", GetLastError());
+			debug3("ConvertStringSecurityDescriptorToSecurityDescriptorW failed with error code %lu", GetLastError());
 			goto cleanup;
 		}
 
@@ -487,7 +487,7 @@ fileio_open(const char *path_utf8, int flags, mode_t mode)
 
 	if (handle == INVALID_HANDLE_VALUE) {
 		errno = errno_from_Win32LastError();
-		debug3("failed to open file:%S error:%d", path_utf16, GetLastError());
+		debug3("failed to open file:%S error:%lu", path_utf16, GetLastError());
 		goto cleanup;
 	}
 
@@ -563,7 +563,7 @@ fileio_ReadFileEx(struct w32_io* pio, unsigned int bytes_requested)
 		pio->read_details.pending = TRUE;
 	else {
 		errno = errno_from_Win32LastError();
-		debug3("ReadFileEx() ERROR:%d, io:%p", GetLastError(), pio);
+		debug3("ReadFileEx() ERROR:%lu, io:%p", GetLastError(), pio);
 		return -1;
 	}
 
@@ -673,7 +673,7 @@ WriteCompletionRoutine(_In_ DWORD dwErrorCode,
 	pio->write_details.error = dwErrorCode;
 	/* TODO - assert that remaining == dwNumberOfBytesTransfered */
 	if ((dwErrorCode == 0) && (pio->write_details.remaining != dwNumberOfBytesTransfered)) {
-		error("WriteCB - ERROR: broken assumption, io:%p, wrote:%d, remaining:%d", pio,
+		error("WriteCB - ERROR: broken assumption, io:%p, wrote:%lu, remaining:%lu", pio,
 			dwNumberOfBytesTransfered, pio->write_details.remaining);
 		debug_assert_internal();
 	}
@@ -802,7 +802,7 @@ fileio_write(struct w32_io* pio, const void *buf, size_t max_bytes)
 	/* if write has completed, pick up any error reported*/
 	if (!pio->write_details.pending && pio->write_details.error) {
 		errno = errno_from_Win32Error(pio->write_details.error);
-		debug3("write - ERROR from cb:%d, io:%p", pio->write_details.error, pio);
+		debug3("write - ERROR from cb:%lu, io:%p", pio->write_details.error, pio);
 		pio->write_details.error = 0;
 		return -1;
 	}
