@@ -290,7 +290,7 @@ process_add_identity(struct sshbuf* request, struct sshbuf* response, struct age
 	size_t comment_len, pubkey_blob_len;
 	u_char *pubkey_blob = NULL;
 	char *thumbprint = NULL, *comment;
-	const char *blob;
+	const unsigned char *blob;
 	char* eblob = NULL;
 	HKEY reg = 0, sub = 0, user_root = 0;
 	SECURITY_ATTRIBUTES sa;
