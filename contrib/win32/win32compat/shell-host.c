@@ -1420,7 +1420,7 @@ int start_as_shell(wchar_t* cmd)
 	si.cb = sizeof(STARTUPINFOW);
 
 	if (CreateProcessW(NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi) == FALSE) {
-		printf("ssh-shellhost cannot run '%ls', error: %d", cmd, GetLastError());
+		printf("ssh-shellhost cannot run '%ls', error: %lu", cmd, GetLastError());
 		exit(255);
 	}
 
@@ -1435,7 +1435,7 @@ int start_as_shell(wchar_t* cmd)
 	WaitForSingleObject(pi.hProcess, INFINITE);
 
 	if (!GetExitCodeProcess(pi.hProcess, &child_exit_code))
-		printf("ssh-shellhost unable to track child process, error: %d", GetLastError());
+		printf("ssh-shellhost unable to track child process, error: %lu", GetLastError());
 
 	CloseHandle(pi.hProcess);
 	return child_exit_code;
