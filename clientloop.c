@@ -1114,6 +1114,7 @@ process_escapes(struct ssh *ssh, Channel *c,
 					fatal_fr(r, "sshbuf_putf");
 				continue;
 
+#ifndef FORK_NOT_SUPPORTED
 			case '&':
 				if (c->ctl_chan != -1)
 					goto noescape;
@@ -1148,6 +1149,7 @@ process_escapes(struct ssh *ssh, Channel *c,
 				if ((r = sshbuf_put_u8(bin, 4)) != 0)
 					fatal_fr(r, "sshbuf_put_u8");
 				return -1;
+#endif
 			case '?':
 				print_escape_help(berr, efc->escape_char,
 				    (c && c->ctl_chan != -1),

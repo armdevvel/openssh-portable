@@ -307,6 +307,7 @@ notify_start(int force_askpass, const char *fmt, ...)
 		goto out;
 	}
 	osigchld = ssh_signal(SIGCHLD, SIG_DFL);
+#ifndef FORK_NOT_SUPPORTED
 	if ((pid = fork()) == -1) {
 		error_f("fork: %s", strerror(errno));
 		ssh_signal(SIGCHLD, osigchld);
@@ -323,6 +324,13 @@ notify_start(int force_askpass, const char *fmt, ...)
 		_exit(1);
 		/* NOTREACHED */
 	}
+#else
+	{
+		setenv("SSH_ASKPASS_PROMPT", "none", 1); /* hint to UI */
+		spawnlp(_P_WAIT, askpass, askpass, prompt, (char *)NULL);
+		pid = 0; // child exited -- don't kill or wait
+	}
+#endif
  out_ctx:
 	if ((ret = calloc(1, sizeof(*ret))) == NULL) {
 		if (pid != -1)
