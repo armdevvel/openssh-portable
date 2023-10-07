@@ -20,6 +20,7 @@
 #include <sys/socket.h>
 #include <stdio.h>
 #include <signal.h>
+#include <stdint.h>
 
 /* Data structure for representing a forwarding request. */
 struct Forward {
