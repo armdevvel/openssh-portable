@@ -1,6 +1,8 @@
 #pragma once
+#ifdef _MSC_VER
 #ifndef __attribute__
 #define __attribute__(A)
+#endif
 #endif
 
 #include "log.h"

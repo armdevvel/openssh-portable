@@ -43,7 +43,9 @@
 #include <ntstatus.h>
 #include <stdio.h>
 
+#ifdef _MSC_VER
 #define __attribute__(a)
+#endif
 #include "inc/sys/types.h"
 #include "xmalloc.h"
 #include "groupaccess.h"
