@@ -22,6 +22,12 @@ add_global_arguments('-DWITH_OPENSSL=1', language: 'c')
 # debugging
 add_global_arguments('-DSTDERR_LOG_LEVEL=SYSLOG_LEVEL_INFO', language: 'c')
 
+# clutter
+add_global_arguments('-Wno-comment', language: 'c')
+add_global_arguments('-Wno-parentheses', language: 'c')
+add_global_arguments('-Wno-unused-variable', language: 'c')
+add_global_arguments('-Wno-pointer-sign', language: 'c')
+
 # common includes: config.h, sshTelemetry.h (dumbed)
 common_header_dir = 'contrib/win32/openssh'
 win32iocompat_dir = 'contrib/win32/win32compat'
@@ -30,9 +36,7 @@ openbsdcompat_dir = 'openbsd-compat'
 
 subdir(win32iocompat_dir)
 
-lib_win32io = shared_library('win32iocompat', win32iocompat_srcs,
-    include_directories: [win32iocompat_dir, common_header_dir],
-    link_args: wingw_linker_caveats + [
+platform_libraries = [
         '-lkernel32',
         '-lshlwapi',
         '-lwsock32',
@@ -40,8 +44,13 @@ lib_win32io = shared_library('win32iocompat', win32iocompat_srcs,
         '-lcrypt32',
         '-lsecur32',
         '-luserenv',
-        '-lntoskrnl',
-    ])
+        '-lntdll',
+    ]
+
+lib_win32io = shared_library('win32iocompat', win32iocompat_srcs,
+    include_directories: [win32iocompat_dir, common_header_dir],
+    link_args: wingw_linker_caveats + platform_libraries,
+    install: true)
 
 subdir(openbsdcompat_dir)
 
@@ -52,7 +61,8 @@ lib_openbsd = shared_library('openbsdcompat', openbsdcompat_srcs + files('hash.c
     include_directories: [win32iocompat_inc],
     link_with: [lib_win32io],
     dependencies: [dep_openssl],
-    link_args: wingw_linker_caveats + ['-lws2_32'])
+    link_args: wingw_linker_caveats + ['-lws2_32'],
+    install: true)
 
 core_srcs_common = [
         'addr.c',
@@ -114,7 +124,7 @@ core_srcs_common = [
         'platform-tracing.c',
         'platform.c',
         'sandbox-pledge.c',
-        'contrib/win32/win32compat/ttymodes_windows.c',
+        'contrib/win32/win32compat/ttymodes_windows.c', #  etc. push down
         'contrib/win32/win32compat/w32-sshfileperm.c',
         'kexgexs.c',
         'ssh-ecdsa-sk.c',
@@ -152,5 +162,141 @@ lib_coressh = shared_library('coressh', core_srcs_common + core_srcs_openssl,
     include_directories: [win32iocompat_inc, common_header_dir],
     link_with: [lib_win32io, lib_openbsd],
     dependencies: [dep_openssl, dep_libzlib],
-    link_args: wingw_linker_caveats + ['-lws2_32'])
+    link_args: wingw_linker_caveats + ['-lws2_32'],
+    install: true)
 
+# version.rc is compiled externally to version.o
+wingw_linked_version = ['version.o']
+
+wingw_linked_console = ['-mconsole', '-municode']
+
+# Executables: keygen scp sftp sftp-server ssh-add ssh-agent ssh-keyscan ssh-pkcs11-helper ssh-shellhost [ssh-sk-helper] ssh sshd
+
+winmain = files(
+    'contrib/win32/win32compat/wmain_common.c',
+    'contrib/win32/win32compat/win32-utf8.c',
+)
+
+sftpsrc = files(
+    'sftp-client.c',
+    'sftp-common.c',
+    'sftp-glob.c',
+    'sftp-usergroup.c',
+)
+
+subdir('contrib/win32/win32compat/ssh-agent')
+
+toolkit = [
+    ['keygen', winmain + files(
+        'ssh-keygen.c',
+        'sshsig.c',
+        'ssh-sk-client.c',
+    ), []],
+    ['ssh', winmain + files(
+        'clientloop.c',
+        'readconf.c',
+        'ssh.c',
+        'sshconnect.c',
+        'sshconnect2.c',
+        'contrib/win32/win32compat/win32_sshtty.c', # push down
+        'ssh-sk-client.c',
+        'sshkey.c',
+    ), ['-lws2_32']],
+    ['sshd', files(
+        'audit-bsm.c',
+        'audit-linux.c',
+        'audit.c',
+        'auth-bsdauth.c',
+        'auth-krb5.c',
+        'auth-options.c',
+        'auth-pam.c',
+        'auth-passwd.c',
+        'auth-rhosts.c',
+        'auth-shadow.c',
+        'auth-sia.c',
+        'auth.c',
+        'auth2-chall.c',
+        'auth2-gss.c',
+        'auth2-hostbased.c',
+        'auth2-kbdint.c',
+        'auth2-none.c',
+        'auth2-passwd.c',
+        'auth2-pubkey.c',
+        'auth2.c',
+        'gss-serv-krb5.c',
+        'gss-serv.c',
+        'loginrec.c',
+        'monitor.c',
+        'monitor_wrap.c',
+        'platform.c',
+        'sandbox-capsicum.c',
+        'sandbox-darwin.c',
+        'sandbox-null.c',
+        'sandbox-rlimit.c',
+        'sandbox-seccomp-filter.c',
+        'sandbox-systrace.c',
+        'servconf.c',
+        'serverloop.c',
+        'session.c',
+        'sftp-common.c',
+        'sshd.c',
+        'sshlogin.c',
+        'auth2-pubkeyfile.c',
+        'srclimit.c',
+        'ssh-sk-client.c',
+        'sshkey.c',
+        'contrib/win32/win32compat/win32_groupaccess.c', # ...push down...
+        'contrib/win32/win32compat/win32_sshpty.c',
+        'contrib/win32/win32compat/wmain_sshd.c', # not wmain_common!
+        'contrib/win32/win32compat/w32fd.c', # __wprogdir
+        'contrib/win32/win32compat/w32-doexec.c',
+        'contrib/win32/win32compat/win32-utf8.c',
+    ), ['-lws2_32', '-lcrypt32']],
+    ['scp', winmain + sftpsrc + files('scp.c'), ['-lws2_32']],
+    ['sftp', winmain + sftpsrc + files(
+        'sftp.c',
+        'progressmeter.c',
+    ), ['-lws2_32']],
+    ['sftp-server', winmain + files(
+        'sftp-common.c',
+        'sftp-server-main.c',
+        'sftp-server.c',
+    ), ['-lws2_32']],
+    ['ssh-add', winmain + files(
+        'ssh-add.c',
+        'ssh-sk-client.c', # ?
+    ), ['-lws2_32']],
+    ['ssh-keyscan', winmain + files(
+        'ssh-keyscan.c',
+        'ssh-sk-client.c', # ?
+    ), ['-lws2_32']],
+    ['ssh-agent', ssh_agent_srcs + files(
+        'ssh-pkcs11-client.c',
+        'ssh-sk-client.c'
+    ), wingw_linked_console + ['agent-events.o', '-lcrypt32']],
+    ['ssh-pkcs11-helper', winmain + files(
+        'ssh-pkcs11-helper.c',
+        'ssh-pkcs11.c',
+        'ssh-sk-client.c', # ?
+    ), []],
+    ['ssh-shellhost', files(
+        'contrib/win32/win32compat/shell-host.c', # ...push down
+        'contrib/win32/win32compat/utf.c'
+    ), wingw_linked_console],
+    # ['ssh-sk-helper', winmain + files(
+    #     'ssh-sk-helper.c',
+    #     'ssh-sk.c',
+    #     'sk-usbhid.c',
+    # ), []],
+]
+
+foreach tool : toolkit
+    executable(tool[0], tool[1],
+        include_directories: [win32iocompat_inc, common_header_dir],
+        link_with: [lib_win32io, lib_openbsd, lib_coressh],
+        dependencies: [dep_openssl, dep_libzlib],
+        link_args: wingw_linker_caveats + wingw_linked_version + tool[2],
+        install: true)
+endforeach
+
+# TODO install headers and export libraries
