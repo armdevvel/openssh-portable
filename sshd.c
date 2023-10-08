@@ -132,6 +132,10 @@
 #include "srclimit.h"
 #include "dh.h"
 
+#if !defined(socket) /* canary */
+#error 'socket' is not a macro (i.e. the included sys/socket.h is NOT the win32io wrapper)
+#endif
+
 /* Re-exec fds */
 #define REEXEC_DEVCRYPTO_RESERVED_FD	(STDERR_FILENO + 1)
 #define REEXEC_STARTUP_PIPE_FD		(STDERR_FILENO + 2)

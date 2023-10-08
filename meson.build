@@ -248,7 +248,6 @@ toolkit = [
         'contrib/win32/win32compat/win32_groupaccess.c', # ...push down...
         'contrib/win32/win32compat/win32_sshpty.c',
         'contrib/win32/win32compat/wmain_sshd.c', # not wmain_common!
-        'contrib/win32/win32compat/w32fd.c', # __wprogdir
         'contrib/win32/win32compat/w32-doexec.c',
         'contrib/win32/win32compat/win32-utf8.c',
     ), ['-lws2_32', '-lcrypt32']],
