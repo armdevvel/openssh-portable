@@ -273,7 +273,7 @@ toolkit = [
     ['ssh-agent', ssh_agent_srcs + files(
         'ssh-pkcs11-client.c',
         'ssh-sk-client.c'
-    ), wingw_linked_console + ['agent-events.o', '-lcrypt32']],
+    ), ['agent-events.o', '-lcrypt32']],
     ['ssh-pkcs11-helper', winmain + files(
         'ssh-pkcs11-helper.c',
         'ssh-pkcs11.c',
@@ -282,7 +282,7 @@ toolkit = [
     ['ssh-shellhost', files(
         'contrib/win32/win32compat/shell-host.c', # ...push down
         'contrib/win32/win32compat/utf.c'
-    ), wingw_linked_console],
+    ), []],
     # ['ssh-sk-helper', winmain + files(
     #     'ssh-sk-helper.c',
     #     'ssh-sk.c',
@@ -295,7 +295,7 @@ foreach tool : toolkit
         include_directories: [win32iocompat_inc, common_header_dir],
         link_with: [lib_win32io, lib_openbsd, lib_coressh],
         dependencies: [dep_openssl, dep_libzlib],
-        link_args: wingw_linker_caveats + wingw_linked_version + tool[2],
+        link_args: wingw_linker_caveats + wingw_linked_version + wingw_linked_console + tool[2],
         install: true)
 endforeach
 
