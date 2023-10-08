@@ -983,23 +983,21 @@ w32_gethostname(char *name_utf8, size_t len)
 
 	if (IsWindows8OrGreater()) {
 		/* TODO - GetHostNameW not present in Win7, do GetProcAddr on Win8+*/
-	        /*
 		wchar_t name_utf16[256];
 		if (GetHostNameW(name_utf16, 256) == SOCKET_ERROR) {
-	                errno = errno_from_WSALastError();
-	                return -1;
-	        }
+				errno = errno_from_WSALastError();
+				return -1;
+		}
 
-	        if ((tmp_name_utf8 = utf16_to_utf8(name_utf16)) == NULL ||
-	                strlen(tmp_name_utf8) >= len) {
-	                errno = EFAULT; //??
-	                return -1;
-	        }
+		if ((tmp_name_utf8 = utf16_to_utf8(name_utf16)) == NULL ||
+				strlen(tmp_name_utf8) >= len) {
+				errno = EFAULT; //??
+				return -1;
+		}
 
-	        memcpy(name_utf8, tmp_name_utf8, strlen(tmp_name_utf8) + 1);
-	        free(tmp_name_utf8);
-	        return 0; */
-		return gethostname(name_utf8, (int)len);
+		memcpy(name_utf8, tmp_name_utf8, strlen(tmp_name_utf8) + 1);
+		free(tmp_name_utf8);
+		return 0;
 	} else
 		return gethostname(name_utf8, (int)len);
 }
