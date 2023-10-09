@@ -166,7 +166,7 @@ wmain(int argc, wchar_t **argv)
 				}
 
 				if (StartService(svc_handle, 0, NULL) == FALSE && GetLastError() != ERROR_SERVICE_ALREADY_RUNNING) {
-					fatal("unable to start ssh-agent service, error :%d", GetLastError());
+					fatal("unable to start ssh-agent service, error :%lu", GetLastError());
 					return -1;
 				}
 

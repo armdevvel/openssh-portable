@@ -77,7 +77,7 @@ iocp_work(LPVOID lpParam)
 		con = NULL;
 		p_ol = NULL;
 		if (GetQueuedCompletionStatus(ioc_port, &bytes, (ULONG_PTR*)&con, &p_ol, INFINITE) == FALSE) {
-			debug("iocp error: %d on %p", GetLastError(), con);
+			debug("iocp error: %lu on %p", GetLastError(), con);
 			if (con)
 				agent_connection_on_error(con, GetLastError());
 			else
@@ -107,7 +107,7 @@ agent_listen_loop()
 	sddl_str = L"D:P(A;;GA;;;SY)(A;;GA;;;BA)(A;;0x12019b;;;AU)";
 	if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl_str, SDDL_REVISION_1,
 		&sa.lpSecurityDescriptor, &sa.nLength))
-		fatal("cannot convert sddl ERROR:%d", GetLastError());
+		fatal("cannot convert sddl ERROR:%lu", GetLastError());
 
 	sa.bInheritHandle = FALSE;
 
@@ -125,7 +125,7 @@ agent_listen_loop()
 			&sa);
 
 		if (pipe == INVALID_HANDLE_VALUE) {
-			verbose("cannot create listener pipe ERROR:%d", GetLastError());
+			verbose("cannot create listener pipe ERROR:%lu", GetLastError());
 			SetEvent(event_stop_agent);
 		} else if (ConnectNamedPipe(pipe, &ol) != FALSE) {
 			verbose("ConnectNamedPipe returned TRUE unexpectedly ");
@@ -136,7 +136,7 @@ agent_listen_loop()
 			debug("Client has already connected");
 			SetEvent(ol.hEvent);
 		} else if (GetLastError() != ERROR_IO_PENDING) {
-			debug("ConnectNamedPipe failed ERROR: %d", GetLastError());
+			debug("ConnectNamedPipe failed ERROR: %lu", GetLastError());
 			SetEvent(event_stop_agent);
 		}
 
@@ -152,7 +152,7 @@ agent_listen_loop()
 			DWORD client_pid = 0;
 			pipe = INVALID_HANDLE_VALUE;
 			GetNamedPipeClientProcessId(con, &client_pid);
-			verbose("client pid %d connected", client_pid);
+			verbose("client pid %lu connected", client_pid);
 			if (debug_mode) {
 				agent_process_connection(con);
 				agent_cleanup();
@@ -171,9 +171,9 @@ agent_listen_loop()
 				    (CreateProcessW(NULL, path, NULL, NULL, TRUE,
 					DETACHED_PROCESS, NULL, NULL,
 					&si, &pi) == FALSE)) {
-					verbose("Failed to create child process %ls ERROR:%d", module_path, GetLastError());
+					verbose("Failed to create child process %ls ERROR:%lu", module_path, GetLastError());
 				} else {
-					debug("spawned worker %d for agent client pid %d ", pi.dwProcessId, client_pid);
+					debug("spawned worker %lu for agent client pid %lu ", pi.dwProcessId, client_pid);
 					CloseHandle(pi.hProcess);
 					CloseHandle(pi.hThread);
 				}
@@ -182,7 +182,7 @@ agent_listen_loop()
 			}
 			
 		} else {
-			fatal("wait on events ended with %d ERROR:%d", r, GetLastError());
+			fatal("wait on events ended with %lu ERROR:%lu", r, GetLastError());
 		}
 
 	}
@@ -236,7 +236,7 @@ agent_start(BOOL dbg_mode)
 	DWORD process_id = GetCurrentProcessId();
 	wchar_t* sddl_str;
 	
-	verbose("%s pid:%d, dbg:%d", __FUNCTION__, process_id, dbg_mode);
+	verbose("%s pid:%lu, dbg:%d", __FUNCTION__, process_id, dbg_mode);
 	debug_mode = dbg_mode;
 
 	memset(&sa, 0, sizeof(SECURITY_ATTRIBUTES));
@@ -246,15 +246,15 @@ agent_start(BOOL dbg_mode)
 	sddl_str = L"D:PAI(A;OICI;KA;;;SY)(A;OICI;KA;;;BA)";
 	if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl_str, SDDL_REVISION_1,
 	    &sa.lpSecurityDescriptor, &sa.nLength))
-		fatal("cannot convert sddl ERROR:%d", GetLastError());
+		fatal("cannot convert sddl ERROR:%lu", GetLastError());
 	if ((r = RegCreateKeyExW(HKEY_LOCAL_MACHINE, SSH_AGENT_ROOT, 0, 0, 0, KEY_WRITE, &sa, &agent_root, 0)) != ERROR_SUCCESS)
 		fatal("cannot create agent root reg key, ERROR:%d", r);
 	if ((r = RegSetValueExW(agent_root, L"ProcessID", 0, REG_DWORD, (BYTE*)&process_id, 4)) != ERROR_SUCCESS)
 		fatal("cannot publish agent master process id ERROR:%d", r);
 	if ((event_stop_agent = CreateEvent(NULL, TRUE, FALSE, NULL)) == NULL)
-		fatal("cannot create global stop event ERROR:%d", GetLastError());
+		fatal("cannot create global stop event ERROR:%lu", GetLastError());
 	if ((ol.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL)) == NULL)
-		fatal("cannot create event ERROR:%d", GetLastError());
+		fatal("cannot create event ERROR:%lu", GetLastError());
 	pipe = INVALID_HANDLE_VALUE;
 	sa.bInheritHandle = FALSE;
 	agent_listen_loop();
@@ -324,7 +324,7 @@ get_con_client_info(struct agent_connection* con)
 
 	// Get client primary token
 	if (DuplicateTokenEx(client_primary_token, TOKEN_QUERY | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE, NULL, SecurityImpersonation, TokenPrimary, &sshagent_client_primary_token) == FALSE) {
-		error_f("Failed to duplicate the primary token. error:%d", GetLastError());
+		error_f("Failed to duplicate the primary token. error:%lu", GetLastError());
 	}
 
 	// Get username
@@ -383,7 +383,7 @@ agent_process_connection(HANDLE pipe)
 	verbose("%s pipe:%p", __FUNCTION__, pipe);
 
 	if ((ioc_port = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, (ULONG_PTR)NULL, 0)) == NULL)
-		fatal("cannot create ioc port ERROR:%d", GetLastError());
+		fatal("cannot create ioc port ERROR:%lu", GetLastError());
 
 	if ((con = malloc(sizeof(struct agent_connection))) == NULL)
 		fatal("failed to alloc");

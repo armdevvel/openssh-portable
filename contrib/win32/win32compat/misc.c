@@ -1156,7 +1156,7 @@ statvfs(const char *path, struct statvfs *buf)
 		free(path_utf16);
 		return 0;
 	} else {
-		debug5("ERROR: Cannot get free space for [%s]. Error code is : %d.", path, GetLastError());
+		debug5("ERROR: Cannot get free space for [%s]. Error code is : %lu.", path, GetLastError());
 		errno = errno_from_Win32LastError();
 		free(path_utf16);
 		return -1;
@@ -1410,7 +1410,7 @@ create_directory_withsddl(wchar_t *path_w, wchar_t *sddl_w)
 		sa.bInheritHandle = FALSE;
 
 		if (ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl_w, SDDL_REVISION, &pSD, NULL) == FALSE) {
-			error("ConvertStringSecurityDescriptorToSecurityDescriptorW failed with error code %d", GetLastError());
+			error("ConvertStringSecurityDescriptorToSecurityDescriptorW failed with error code %lu", GetLastError());
 			return -1;
 		}
 
@@ -1421,7 +1421,7 @@ create_directory_withsddl(wchar_t *path_w, wchar_t *sddl_w)
 
 		sa.lpSecurityDescriptor = pSD;
 		if (!CreateDirectoryW(path_w, &sa)) {
-			error("Failed to create directory:%ls error:%d", path_w, GetLastError());
+			error("Failed to create directory:%ls error:%lu", path_w, GetLastError());
 			return -1;
 		}
 	}
@@ -1446,18 +1446,18 @@ copy_file(char *source, char *destination)
 	if ((stat(source, &st) >= 0) && (stat(destination, &st) < 0)) {
 		wchar_t *source_w = utf8_to_utf16(source);
 		if (!source_w) {
-			error("%s utf8_to_utf16() has failed to convert string:%s", __func__, source_w);
+			error("%s utf8_to_utf16() has failed to convert string:%ls", __func__, source_w);
 			return -1;
 		}
 
 		wchar_t *destination_w = utf8_to_utf16(destination);
 		if (!destination_w) {
-			error("%s utf8_to_utf16() has failed to convert string:%s", __func__, destination_w);
+			error("%s utf8_to_utf16() has failed to convert string:%ls", __func__, destination_w);
 			return -1;
 		}
 
 		if (!CopyFileW(source_w, destination_w, FALSE)) {
-			error("Failed to copy %ls to %ls, error:%d", source_w, destination_w, GetLastError());
+			error("Failed to copy %ls to %ls, error:%lu", source_w, destination_w, GetLastError());
 			return -1;
 		}
 	}
@@ -1649,7 +1649,7 @@ lookup_sid(const wchar_t* name_utf16, PSID psid, DWORD * psid_len)
 		r = LookupAccountNameW(NULL, name_utf16, target_psid, &sid_len, dom, &dom_len, &n_use);
 
 	if (!r) {
-		error_f("Failed to retrieve SID for user:%S error:%d", name_utf16, GetLastError());
+		error_f("Failed to retrieve SID for user:%S error:%lu", name_utf16, GetLastError());
 		errno = errno_from_Win32LastError();
 		goto cleanup;
 	}
@@ -1661,7 +1661,7 @@ lookup_sid(const wchar_t* name_utf16, PSID psid, DWORD * psid_len)
 		wchar_t computer_name[CNLEN + 1];
 		DWORD computer_name_size = ARRAYSIZE(computer_name);
 		if (GetComputerNameW(computer_name, &computer_name_size) == 0) {
-			error_f("GetComputerNameW() failed with error:%d", GetLastError());
+			error_f("GetComputerNameW() failed with error:%lu", GetLastError());
 			goto cleanup;
 		}
 

@@ -217,7 +217,7 @@ init_prog_paths()
 		fatal("couldn't find ProgramData environment variable");
 
 	if(!(__wprogdata = utf8_to_utf16(__progdata)))
-		fatal("%s out of memory", __func__, __LINE__);
+		fatal("%s (line %d) out of memory", __func__, __LINE__);
 
 	processed = 1;
 }
@@ -664,7 +664,7 @@ w32_io_process_fd_flags(struct w32_io* pio, int flags)
 	* UF_UNIX sockets that are not connected yet
 	*/
 	if (IS_VALID_HANDLE(h) && (SetHandleInformation(h, HANDLE_FLAG_INHERIT, shi_flags) == FALSE)) {
-		debug3("fcntl - SetHandleInformation failed with error:%d, io:%p",
+		debug3("fcntl - SetHandleInformation failed with error:%lu, io:%p",
 			GetLastError(), pio);
 		errno = EOTHER;
 		return -1;
@@ -930,7 +930,7 @@ dup_handle(int fd)
 		HANDLE dup_handle;
 		if (!DuplicateHandle(GetCurrentProcess(), h, GetCurrentProcess(), &dup_handle, 0, TRUE, DUPLICATE_SAME_ACCESS)) {
 			errno = EOTHER;
-			error("dup - ERROR: DuplicatedHandle() :%d", GetLastError());
+			error("dup - ERROR: DuplicatedHandle() :%lu", GetLastError());
 		}
 		return dup_handle;
 	}
@@ -1113,7 +1113,7 @@ spawn_child_internal(const char* cmd, char *const argv[], HANDLE in, HANDLE out,
 	}
 	else {
 		errno = GetLastError();
-		error("%s failed error:%d", (as_user ? "CreateProcessAsUserW" : "CreateProcessW"), GetLastError());
+		error("%s failed error:%lu", (as_user ? "CreateProcessAsUserW" : "CreateProcessW"), GetLastError());
 	}
 
 cleanup:

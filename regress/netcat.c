@@ -1571,7 +1571,7 @@ socks_connect(const char *host, const char *port,
 		if (cnt != 4)
 			err(1, "read failed (%zu/4)", cnt);
 		if (buf[1] != 0)
-			errx(1, "connection failed, SOCKS error %d", buf[1]);
+			errx(1, "connection failed, SOCKS error %u", buf[1]);
 		switch (buf[3]) {
 		case SOCKS_IPV4:
 			cnt = atomicio(read, proxyfd, buf + 4, 6);
@@ -1607,7 +1607,7 @@ socks_connect(const char *host, const char *port,
 		if (cnt != 8)
 			err(1, "read failed (%zu/8)", cnt);
 		if (buf[1] != 90)
-			errx(1, "connection failed, SOCKS error %d", buf[1]);
+			errx(1, "connection failed, SOCKS error %u", buf[1]);
 	} else if (socksv == -1) {
 		/* HTTP proxy CONNECT */
 

@@ -64,7 +64,7 @@ w32_alarm(unsigned int sec)
 	due.QuadPart *= sec;
 	/* this call resets the timer if it is already active */
 	if (!SetWaitableTimer(timer_info.timer, &due, 0, sigalrm_APC, NULL, FALSE)) {
-		debug3("alram() - ERROR SetWaitableTimer() %d", GetLastError());
+		debug3("alram() - ERROR SetWaitableTimer() %lu", GetLastError());
 		return 0;;
 	}
 

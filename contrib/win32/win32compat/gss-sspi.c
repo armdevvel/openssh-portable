@@ -447,7 +447,7 @@ gss_acquire_cred(_Out_ OM_uint32 *minor_status, _In_opt_ gss_name_t desired_name
 		if (SystemTimeToFileTime(&current_time_system, &current_time) != 0)
 			*time_rec = (OM_uint32)(expiry.QuadPart - ((PLARGE_INTEGER)&current_time)->QuadPart) / 10000;
 		else
-			error("SystemTimeToFileTime failed with %d", GetLastError());
+			error("SystemTimeToFileTime failed with %lu", GetLastError());
 	}
 
 	/* set actual supported mechs if requested */
@@ -602,7 +602,7 @@ gss_init_sec_context(
 		if (SystemTimeToFileTime(&current_time_system, &current_time) != 0)
 			*time_rec = (OM_uint32)(expiry.QuadPart - ((PLARGE_INTEGER)&current_time)->QuadPart) / 10000;
 		else
-			error("SystemTimeToFileTime failed with %d", GetLastError());
+			error("SystemTimeToFileTime failed with %lu", GetLastError());
 	}
 
 	/* if requested, return the supported mechanism oid */
@@ -914,7 +914,7 @@ gss_accept_sec_context(_Out_ OM_uint32 * minor_status, _Inout_opt_ gss_ctx_id_t 
 		if (SystemTimeToFileTime(&current_time_system, &current_time) != 0)
 			*time_rec = (OM_uint32)(expiry.QuadPart - ((PLARGE_INTEGER)&current_time)->QuadPart) / 10000;
 		else
-			error("SystemTimeToFileTime failed with %d", GetLastError());
+			error("SystemTimeToFileTime failed with %lu", GetLastError());
 	}
 
 	/* only do checks on the finalized context (no continue needed) */

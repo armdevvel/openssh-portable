@@ -95,15 +95,15 @@ ReadThread(_In_ LPVOID lpParameter)
 				if (GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &dwAttributes)) {
 					dwAttributes |= (ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
 					if (!SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), dwAttributes))
-						debug2("SetConsoleMode on STD_INPUT_HANDLE failed with %d", GetLastError());
+						debug2("SetConsoleMode on STD_INPUT_HANDLE failed with %lu", GetLastError());
 				} else if (GetLastError() != ERROR_INVALID_HANDLE)
-					debug2("GetConsoleMode on STD_INPUT_HANDLE failed with %d", GetLastError());
+					debug2("GetConsoleMode on STD_INPUT_HANDLE failed with %lu", GetLastError());
 
 			}
 
 			if (!ReadFile(WINHANDLE(pio), pio->read_details.buf,
 				pio->read_details.buf_size, &(pio->sync_read_status.transferred), NULL)) {
-				debug4("ReadThread - ReadFile failed, error:%d, io:%p", GetLastError(), pio); 
+				debug4("ReadThread - ReadFile failed, error:%lu, io:%p", GetLastError(), pio); 
 				pio->sync_read_status.error = GetLastError();
 				goto done;
 			}
@@ -124,7 +124,7 @@ ReadThread(_In_ LPVOID lpParameter)
 	} else {
 		if (!ReadFile(WINHANDLE(pio), pio->read_details.buf,
 		    pio->read_details.buf_size, &(pio->sync_read_status.transferred), NULL)) {
-			debug4("ReadThread - ReadFile failed, error:%d, io:%p", GetLastError(), pio); 
+			debug4("ReadThread - ReadFile failed, error:%lu, io:%p", GetLastError(), pio); 
 			pio->sync_read_status.error = GetLastError();
 			goto done;
 		}
@@ -164,7 +164,7 @@ syncio_initiate_read(struct w32_io* pio)
 	read_thread = (HANDLE) _beginthreadex(NULL, 0, ReadThread, pio, 0, NULL);
 	if (read_thread == NULL) {
 		errno = errno_from_Win32LastError();
-		debug3("TermRead initiate - ERROR _beginthreadex %d, io:%p", GetLastError(), pio);
+		debug3("TermRead initiate - ERROR _beginthreadex %lu, io:%p", GetLastError(), pio);
 		return -1;
 	}
 
@@ -218,13 +218,13 @@ WriteThread(_In_ LPVOID lpParameter)
 		if (!WriteFile(WINHANDLE(pio), pio->write_details.buf, pio->sync_write_status.to_transfer,
 		    &(pio->sync_write_status.transferred), NULL)) {
 			pio->sync_write_status.error = GetLastError();
-			debug4("WriteThread - WriteFile %d, io:%p", GetLastError(), pio);
+			debug4("WriteThread - WriteFile %lu, io:%p", GetLastError(), pio);
 		}
 	}
 
 	
 	if (0 == QueueUserAPC(WriteAPCProc, main_thread, (ULONG_PTR)pio)) {
-		error("WriteThread thread - ERROR QueueUserAPC failed %d, io:%p", GetLastError(), pio);
+		error("WriteThread thread - ERROR QueueUserAPC failed %lu, io:%p", GetLastError(), pio);
 		pio->write_details.pending = FALSE;
 		pio->write_details.error = GetLastError();
 		debug_assert_internal();
@@ -244,7 +244,7 @@ syncio_initiate_write(struct w32_io* pio, DWORD num_bytes)
 	write_thread = (HANDLE)_beginthreadex(NULL, 0, WriteThread, pio, 0, NULL);
 	if (write_thread == NULL) {
 		errno = errno_from_Win32LastError();
-		debug3("syncio_initiate_write initiate - ERROR _beginthreadex %d, io:%p", GetLastError(), pio);
+		debug3("syncio_initiate_write initiate - ERROR _beginthreadex %lu, io:%p", GetLastError(), pio);
 		return -1;
 	}
 

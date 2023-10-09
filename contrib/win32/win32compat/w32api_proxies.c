@@ -41,7 +41,7 @@ system32_dir()
 		return s_system32_dir;
 
 	if (!GetSystemDirectoryW(s_system32_path, _countof(s_system32_path))) {
-		debug3("GetSystemDirectory failed with error %d", GetLastError());
+		debug3("GetSystemDirectory failed with error %lu", GetLastError());
 		return NULL;
 	}
 	s_system32_dir = s_system32_path;
@@ -56,7 +56,7 @@ load_module(wchar_t* name)
 
 	/*system uses a standard search strategy to find the module */
 	if ((hm = LoadLibraryW(name)) == NULL)
-		debug3("unable to load module %ls at run time, error: %d", name, GetLastError());
+		debug3("unable to load module %ls at run time, error: %lu", name, GetLastError());
 
 	return hm;
 }
@@ -119,11 +119,11 @@ load_ntdll()
 FARPROC get_proc_address(HMODULE hm, char* fn)
 {
 	if (hm == NULL) {
-		debug3("GetProcAddress of %s failed with error %d.", fn, GetLastError());
+		debug3("GetProcAddress of %s failed with error %lu.", fn, GetLastError());
 	}
 	FARPROC ret = GetProcAddress(hm, fn);
 	if (!ret)
-		debug3("GetProcAddress of %s failed with error %d.", fn, GetLastError());
+		debug3("GetProcAddress of %s failed with error %lu.", fn, GetLastError());
 
 	return ret;
 }

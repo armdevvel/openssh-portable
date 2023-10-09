@@ -123,7 +123,7 @@ getrnd(u_char *s, size_t len) {
 		CRYPT_VERIFYCONTEXT | CRYPT_SILENT) == FALSE ||
 	    CryptGenRandom(hProvider, len, s) == FALSE ||
 	    CryptReleaseContext(hProvider, 0) == FALSE)
-			fatal("%s Crypto error: %d", __func__, GetLastError());
+			fatal("%s Crypto error: %lu", __func__, GetLastError());
 }
 	
 #else /* !WINDOWS */

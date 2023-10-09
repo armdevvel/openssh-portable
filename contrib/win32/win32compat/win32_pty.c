@@ -133,7 +133,7 @@ int exec_command_with_pty(int * pid, char* cmd, int in, int out, int err, unsign
 		CloseHandle(pi.hThread);
 	}
 	else {
-		debug("%s - failed to execute %ls, error:%d", __func__, pty_cmdline, GetLastError());
+		debug("%s - failed to execute %ls, error:%lu", __func__, pty_cmdline, GetLastError());
 		errno = EOTHER;
 		goto done;
 	}

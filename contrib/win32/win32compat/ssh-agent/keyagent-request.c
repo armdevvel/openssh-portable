@@ -75,7 +75,7 @@ get_user_root(struct agent_connection* con, HKEY *root)
 		 * otherwise, this will return default profile 
 		 */
 		if ((ret = RegOpenCurrentUser(KEY_ALL_ACCESS, root)) != ERROR_SUCCESS) {
-			debug("unable to open user's registry hive, ERROR - %d", ret);
+			debug("unable to open user's registry hive, ERROR - %ld", ret);
 			r = -1;
 		}
 			

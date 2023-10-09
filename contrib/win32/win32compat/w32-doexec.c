@@ -505,7 +505,7 @@ int do_exec_windows(struct ssh *ssh, Session *s, const char *command, int pty) {
 
 	if ((process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid)) == NULL) {
 		errno = EOTHER;
-		error("cannot get process handle: %d", GetLastError());
+		error("cannot get process handle: %lu", GetLastError());
 		goto cleanup;
 	}
 
@@ -520,7 +520,7 @@ int do_exec_windows(struct ssh *ssh, Session *s, const char *command, int pty) {
 		!AssignProcessToJobObject(job, process_handle) ||
 		!DuplicateHandle(GetCurrentProcess(), job, process_handle, &job_dup, 0, FALSE, DUPLICATE_SAME_ACCESS)) {
 		errno = EOTHER;
-		error("cannot associate job object: %d", GetLastError());
+		error("cannot associate job object: %lu", GetLastError());
 		TerminateProcess(process_handle, 255);
 		CloseHandle(process_handle);
 		goto cleanup;

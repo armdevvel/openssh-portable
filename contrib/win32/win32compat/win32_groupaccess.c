@@ -89,7 +89,7 @@ get_user_groups()
 	wchar_t computer_name[CNLEN + 1];
 	DWORD computer_name_size = ARRAYSIZE(computer_name);
 	if (GetComputerNameW(computer_name, &computer_name_size) == 0)  {
-		debug3("%s: GetComputerNameW() failed: %d", __FUNCTION__, GetLastError());
+		debug3("%s: GetComputerNameW() failed: %lu", __FUNCTION__, GetLastError());
 		errno = EOTHER;
 		goto cleanup;
 	}
@@ -99,7 +99,7 @@ get_user_groups()
 	if (GetTokenInformation(logon_token, TokenGroups, NULL, 0, &group_size) == 0
 		&& GetLastError() != ERROR_INSUFFICIENT_BUFFER ||
 		(group_buf = (PTOKEN_GROUPS)malloc(group_size)) == NULL) { // CodeQL [SM02320]: GetTokenInformation will initialize group_buf
-		debug3("%s: GetTokenInformation() failed: %d", __FUNCTION__, GetLastError());
+		debug3("%s: GetTokenInformation() failed: %lu", __FUNCTION__, GetLastError());
 		errno = EOTHER;
 		goto cleanup;
 	}
@@ -107,7 +107,7 @@ get_user_groups()
 	/* read group sids from logon token -- this will return a list of groups
 	* similar to the data returned when you do a whoami /groups command */
 	if (GetTokenInformation(logon_token, TokenGroups, group_buf, group_size, &group_size) == 0) {
-		debug3("%s: GetTokenInformation() failed with error %d", __FUNCTION__, GetLastError());
+		debug3("%s: GetTokenInformation() failed with error %lu", __FUNCTION__, GetLastError());
 		errno = EOTHER;
 		goto cleanup;
 	}
@@ -139,7 +139,7 @@ get_user_groups()
 			SID_NAME_USE name_use = 0;
 			if (LookupAccountSidW(NULL, sid, name, &name_len, domain, &domain_len, &name_use) == 0) {
 				errno = ENOENT;
-				debug("%s: LookupAccountSid() failed: %d.", __FUNCTION__, GetLastError());
+				debug("%s: LookupAccountSid() failed: %lu.", __FUNCTION__, GetLastError());
 				goto cleanup;
 			}
 
@@ -200,7 +200,7 @@ check_group_membership(const char* group)
 	}
 	
 	if (!CheckTokenMembership(user_token, sid, &is_member))
-		fatal("%s CheckTokenMembership for user %s failed with %d for group %s", __func__, user_name, GetLastError(), group);
+		fatal("%s CheckTokenMembership for user %s failed with %lu for group %s", __func__, user_name, GetLastError(), group);
 
 cleanup:
 	if (sid)

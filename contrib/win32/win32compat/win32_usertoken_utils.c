@@ -122,7 +122,7 @@ generate_s4u_user_token(wchar_t* user_cpn, int impersonation) {
 		InitLsaString(&logon_process_name, __progname);
 		if ((ret = LsaRegisterLogonProcess(&logon_process_name, &lsa_handle, &mode)) != STATUS_SUCCESS) {
 			ULONG winError = LsaNtStatusToWinError(ret);
-			error_f("LsaRegisterLogonProcess failed with error:%d", winError);
+			error_f("LsaRegisterLogonProcess failed with error:%lu", winError);
 
 			goto done;
 		}
@@ -281,7 +281,7 @@ process_custom_lsa_auth(const char* user, const char* pwd, const char* lsa_pkg)
 	strcpy_s(source_context.SourceName, sizeof(source_context.SourceName), "sshd");
 
 	if (!AllocateLocallyUniqueId(&source_context.SourceIdentifier)) {
-		error("AllocateLocallyUniqueId failed, error:%d", GetLastError());
+		error("AllocateLocallyUniqueId failed, error:%lu", GetLastError());
 		goto done;
 	}
 
@@ -351,7 +351,7 @@ get_user_token(const char* user, int impersonation) {
 		}
 
 		if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS_P, &t1)) {
-			error("%s - OpenProcessToken failed with %d", __func__, GetLastError());
+			error("%s - OpenProcessToken failed with %lu", __func__, GetLastError());
 			goto done;
 		}
 
@@ -359,7 +359,7 @@ get_user_token(const char* user, int impersonation) {
 			token = t1;
 			goto done;
 		} else if (!DuplicateToken(t1, SecurityIdentification, &token))
-			error("%s - DuplicateToken failed with %d", __func__, GetLastError());
+			error("%s - DuplicateToken failed with %lu", __func__, GetLastError());
 				
 		CloseHandle(t1);
 		goto done;
@@ -433,7 +433,7 @@ load_user_profile(HANDLE user_token, char* user)
 	EnablePrivilege("SeBackupPrivilege", 1);
 	EnablePrivilege("SeRestorePrivilege", 1);
 	if (LoadUserProfileW(user_token, &profileInfo) == FALSE) {
-		debug3("%s: LoadUserProfileW() failed for user %S with error %d.", __FUNCTION__, GetLastError());
+		debug3("%s: LoadUserProfileW() failed for user %S with error %lu.", __FUNCTION__, GetLastError());
 	}
 	EnablePrivilege("SeBackupPrivilege", 0);
 	EnablePrivilege("SeRestorePrivilege", 0);
@@ -633,14 +633,14 @@ HANDLE generate_sshd_virtual_token()
 	if ((lsa_ret = pLsaOpenPolicy(NULL, &ObjectAttributes,
 		POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
 		&lsa_policy)) != STATUS_SUCCESS) {
-		error("%s: unable to open policy handle, error: %d",
+		error("%s: unable to open policy handle, error: %lu",
 			__FUNCTION__, (ULONG)pRtlNtStatusToDosError(lsa_ret));
 		goto cleanup;
 	}
 
 	/* alter security to allow policy to account to logon as a service */
 	if ((lsa_add_ret = pLsaAddAccountRights(lsa_policy, sid_user, &svcLogonRight, 1)) != STATUS_SUCCESS) {
-		error("%s: unable to assign SE_SERVICE_LOGON_NAME privilege, error: %d",
+		error("%s: unable to assign SE_SERVICE_LOGON_NAME privilege, error: %lu",
 			__FUNCTION__, (ULONG)pRtlNtStatusToDosError(lsa_add_ret));
 		goto cleanup;
 	}
@@ -648,13 +648,13 @@ HANDLE generate_sshd_virtual_token()
 	/* Logon virtual and create token */
 	if (!pLogonUserExExW(va_name, VIRTUALUSER_DOMAIN, L"", LOGON32_LOGON_SERVICE,
 		LOGON32_PROVIDER_VIRTUAL, NULL, &va_token, NULL, NULL, NULL, NULL)) {
-		debug3("LogonUserExExW failed with %d", GetLastError());
+		debug3("LogonUserExExW failed with %lu", GetLastError());
 		goto cleanup;
 	}
 
 	/* remove all privileges */
 	if (!CreateRestrictedToken(va_token, DISABLE_MAX_PRIVILEGE, 0, NULL, 0, NULL, 0, NULL, &va_token_restricted))
-		debug3("CreateRestrictedToken failed with %d", GetLastError());
+		debug3("CreateRestrictedToken failed with %lu", GetLastError());
 
 	CloseHandle(va_token);
 
@@ -727,7 +727,7 @@ wchar_t* get_final_path_by_handle(HANDLE h)
 
 	if (GetFinalPathNameByHandleW(h, path_buf, PATH_MAX, 0) == 0) {
 		errno = EOTHER;
-		debug3("failed to get final path of file with handle:%d error:%d", h, GetLastError());
+		debug3("failed to get final path of file with handle:%p error:%lu", h, GetLastError());
 		return NULL;
 	}
 
@@ -770,7 +770,7 @@ int lookup_principal_name(const wchar_t * sam_account_name, wchar_t * user_princ
 	}
 
 	/* report error */
-	error("%s: User principal name lookup failed for user '%ls' (explicit: %d, implicit: %d)",
+	error("%s: User principal name lookup failed for user '%ls' (explicit: %lu, implicit: %lu)",
 		__FUNCTION__, sam_account_name, lookup_error, GetLastError());
 	return -1;
 }
@@ -827,7 +827,7 @@ windows_password_auth(const char *username, const char* password)
 			*/
 			error("password for user %s has expired", username);
 		else {
-			debug("Windows authentication failed for user: %ls domain: %ls error: %d",
+			debug("Windows authentication failed for user: %ls domain: %ls error: %lu",
 				unam_utf16, udom_utf16, GetLastError());
 
 			/* If LSA authentication package is configured then it will return the auth_token */

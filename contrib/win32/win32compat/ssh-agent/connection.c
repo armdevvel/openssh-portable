@@ -52,7 +52,7 @@ void
 agent_connection_on_io(struct agent_connection* con, DWORD bytes, OVERLAPPED* ol) 
 {
 	/* process error */
-	debug3("connection io %p #bytes:%d state:%d", con, bytes, con->state);
+	debug3("connection io %p #bytes:%lu state:%d", con, bytes, con->state);
 	if ((bytes == 0) && (GetOverlappedResult(con->pipe_handle, ol, &bytes, FALSE) == FALSE))
 		ABORT_CONNECTION_RETURN(con);
 	if (con->state == DONE)

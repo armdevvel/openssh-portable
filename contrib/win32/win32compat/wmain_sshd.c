@@ -180,7 +180,7 @@ create_openssh_registry_key()
 	// SDDL - FullAcess to System and Builtin/Admins and read only access to Authenticated users
 	sddl_str = L"D:PAI(A;OICI;KA;;;SY)(A;OICI;KA;;;BA)(A;OICI;KR;;;AU)";
 	if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl_str, SDDL_REVISION_1, &sa.lpSecurityDescriptor, &sa.nLength)) {
-		printf("cannot convert sddl ERROR:%d", GetLastError());
+		printf("cannot convert sddl ERROR:%lu", GetLastError());
 		return;
 	}
 
@@ -252,7 +252,7 @@ int wmain(int argc, wchar_t **wargv) {
 		}
 		swprintf_s(path_new_value, path_new_len, L"%s%s%s", __wprogdir, path_value ? L";" : L"",  path_value);
 		if (result = _wputenv_s(L"PATH", path_new_value)) {
-			error("failed to set PATH environment variable: to value:%s, error:%d", path_new_value, result);
+			error("failed to set PATH environment variable: to value:%ls, error:%d", path_new_value, result);
 			errno = result;
 			if (path_new_value)
 				free(path_new_value);

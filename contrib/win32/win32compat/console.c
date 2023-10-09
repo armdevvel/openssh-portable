@@ -137,7 +137,7 @@ ConEnterRawMode()
 
 	if (!GetConsoleMode(GetConsoleInputHandle(), &stdin_dwSavedAttributes)) {
 		dwRet = GetLastError();
-		error("GetConsoleMode on console input handle failed with %d", dwRet);
+		error("GetConsoleMode on console input handle failed with %lu", dwRet);
 		return;
 	}
 
@@ -148,7 +148,7 @@ ConEnterRawMode()
 
 	if (!SetConsoleMode(GetConsoleInputHandle(), dwAttributes)) { /* Windows NT */
 		dwRet = GetLastError();
-		error("SetConsoleMode on STD_INPUT_HANDLE failed with %d", dwRet);
+		error("SetConsoleMode on STD_INPUT_HANDLE failed with %lu", dwRet);
 		return;
 	}
 
@@ -160,7 +160,7 @@ ConEnterRawMode()
 
 	if (!GetConsoleMode(GetConsoleOutputHandle(), &stdout_dwSavedAttributes)) {
 		dwRet = GetLastError();
-		error("GetConsoleMode on GetConsoleOutputHandle() failed with %d", dwRet);
+		error("GetConsoleMode on GetConsoleOutputHandle() failed with %lu", dwRet);
 		return;
 	}
 
@@ -208,12 +208,12 @@ ConEnterRawMode()
 		if (SetConsoleOutputCP(CP_UTF8))
 			debug3("Successfully set console output code page from:%d to %d", console_out_cp_saved, CP_UTF8);
 		else
-			error("Failed to set console output code page from:%d to %d error:%d", console_out_cp_saved, CP_UTF8, GetLastError());
+			error("Failed to set console output code page from:%d to %d error:%lu", console_out_cp_saved, CP_UTF8, GetLastError());
 
 		if (SetConsoleCP(CP_UTF8))
 			debug3("Successfully set console input code page from:%d to %d", console_in_cp_saved, CP_UTF8);
 		else
-			error("Failed to set console input code page from:%d to %d error:%d", console_in_cp_saved, CP_UTF8, GetLastError());
+			error("Failed to set console input code page from:%d to %d error:%lu", console_in_cp_saved, CP_UTF8, GetLastError());
 
 		if (track_view_port_no_pty_hack) {
 			ConSaveViewRect_NoPtyHack();
@@ -255,14 +255,14 @@ ConExitRawMode()
 			if(SetConsoleOutputCP(console_out_cp_saved))
 				debug3("Successfully set console output code page from %d to %d", CP_UTF8, console_out_cp_saved);
 			else
-				error("Failed to set console output code page from %d to %d error:%d", CP_UTF8, console_out_cp_saved, GetLastError());
+				error("Failed to set console output code page from %d to %d error:%lu", CP_UTF8, console_out_cp_saved, GetLastError());
 		}
 
 		if (console_in_cp_saved) {
 			if (SetConsoleCP(console_in_cp_saved))
 				debug3("Successfully set console input code page from %d to %d", CP_UTF8, console_in_cp_saved);
 			else
-				error("Failed to set console input code page from %d to %d error:%d", CP_UTF8, console_in_cp_saved, GetLastError());
+				error("Failed to set console input code page from %d to %d error:%lu", CP_UTF8, console_in_cp_saved, GetLastError());
 		}
 	}
 	
@@ -1206,7 +1206,7 @@ ConMoveVisibleWindow(int offset)
 				ConScrollDown(0, consoleInfo.dwSize.Y - 1);
 
 			if (GetConsoleScreenBufferInfo(GetConsoleOutputHandle(), &consoleInfo) == FALSE) {
-				error("GetConsoleScreenBufferInfo failed with %d", GetLastError());
+				error("GetConsoleScreenBufferInfo failed with %lu", GetLastError());
 				return;
 			}
 			if ((r = memcpy_s(&visibleWindowRect, sizeof(visibleWindowRect), &consoleInfo.srWindow, sizeof(visibleWindowRect))) != 0) {

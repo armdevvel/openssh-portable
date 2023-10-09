@@ -152,7 +152,7 @@ check_secure_file_permission(const char *input_path, struct passwd * pw, int rea
 
 			ret = -1;
 			if (ConvertSidToStringSid(current_trustee_sid, &bad_user) == FALSE) {
-				debug3("ConvertSidToSidString failed with %d. ", GetLastError());
+				debug3("ConvertSidToSidString failed with %lu. ", GetLastError());
 				break;
 			}
 			logit("Bad permissions. Try removing permissions for user: %S\\%S (%s) on file %S.",

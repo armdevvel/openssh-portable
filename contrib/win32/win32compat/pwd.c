@@ -233,7 +233,7 @@ get_passwd(const wchar_t * user_utf16, PSID sid)
 	if (LookupAccountSidW(NULL, binary_sid, user_name, &user_name_length,
 	    domain_name, &domain_name_size, &account_type) == 0) {
 		errno = errno_from_Win32LastError();
-		debug("%s: LookupAccountSid() failed: %d.", __FUNCTION__, GetLastError());
+		debug("%s: LookupAccountSid() failed: %lu.", __FUNCTION__, GetLastError());
 		goto cleanup;
 	}
 
@@ -248,7 +248,7 @@ get_passwd(const wchar_t * user_utf16, PSID sid)
 	wchar_t computer_name[CNLEN + 1];
 	DWORD computer_name_size = ARRAYSIZE(computer_name);
 	if (GetComputerNameW(computer_name, &computer_name_size) == 0) {
-		error_f("GetComputerNameW() failed with error:%d", GetLastError());
+		error_f("GetComputerNameW() failed with error:%lu", GetLastError());
 		goto cleanup;
 	}
 
@@ -271,7 +271,7 @@ get_passwd(const wchar_t * user_utf16, PSID sid)
 	    ExpandEnvironmentStringsW(profile_home, NULL, 0) > PATH_MAX ||
 	    ExpandEnvironmentStringsW(profile_home, profile_home_exp, PATH_MAX) == 0)
 		if (GetWindowsDirectoryW(profile_home_exp, PATH_MAX) == 0) {
-			debug3("GetWindowsDirectoryW failed with %d", GetLastError());
+			debug3("GetWindowsDirectoryW failed with %lu", GetLastError());
 			errno = EOTHER;
 			goto cleanup;
 		}
@@ -304,7 +304,7 @@ getpwnam_placeholder(const char* user) {
 	struct passwd* ret = NULL;
 
 	if (GetWindowsDirectoryW(tmp_home, PATH_MAX) == 0) {
-		debug3("GetWindowsDirectoryW failed with %d", GetLastError());
+		debug3("GetWindowsDirectoryW failed with %lu", GetLastError());
 		errno = EOTHER;
 		goto cleanup;
 	}
