@@ -1262,7 +1262,7 @@ void
 invalid_parameter_handler(const wchar_t* expression, const wchar_t* function, const wchar_t* file, unsigned int line, uintptr_t pReserved)
 {	
 	debug3("Invalid parameter in function: %ls. File: %ls Line: %d.", function, file, line);
-	debug3("Expression: %s", expression);
+	debug3("Expression: %ls", expression);
 }
 
 void
@@ -1315,7 +1315,7 @@ get_others_file_permissions(wchar_t * file_name, int isReadOnlyFile)
 	if ((error_code = GetNamedSecurityInfoW(file_name, SE_FILE_OBJECT,
 		OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
 		&owner_sid, NULL, &dacl, NULL, &pSD)) != ERROR_SUCCESS) {
-		debug3("failed to retrieve the owner sid and dacl of file: %ls with error code: %d", file_name, error_code);
+		debug3("failed to retrieve the owner sid and dacl of file: %ls with error code: %lu", file_name, error_code);
 		goto cleanup;
 	}
 

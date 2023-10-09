@@ -207,7 +207,7 @@ generate_s4u_user_token(wchar_t* user_cpn, int impersonation) {
 	if ((ret = LsaLogonUser(lsa_handle, &origin_name, Network, auth_package_id,
 		logon_info, (ULONG)logon_info_size, NULL, &source_context,
 		(PVOID*)&profile, &profile_size, &logon_id, &token, &quotas, &subStatus)) != STATUS_SUCCESS) {
-		debug("%s: LsaLogonUser() failed. User '%ls' Status: 0x%08X SubStatus %d.", 
+		debug("%s: LsaLogonUser() failed. User '%ls' Status: 0x%08lX SubStatus %ld.", 
 			__FUNCTION__, user_cpn, ret, subStatus);
 		goto done;
 	}
@@ -269,12 +269,12 @@ process_custom_lsa_auth(const char* user, const char* pwd, const char* lsa_pkg)
 	InitLsaString(&origin_name, "sshd");
 
 	if ((ret = LsaRegisterLogonProcess(&logon_process_name, &lsa_handle, &mode)) != STATUS_SUCCESS) {
-		error("LsaRegisterLogonProcess failed, error:%x", ret);
+		error("LsaRegisterLogonProcess failed, error:%lx", ret);
 		goto done;
 	}
 
 	if ((ret = LsaLookupAuthenticationPackage(lsa_handle, &lsa_auth_package_name, &auth_package_id)) != STATUS_SUCCESS) {
-		error("LsaLookupAuthenticationPackage failed, lsa auth pkg:%ls error:%x", lsa_pkg, ret);
+		error("LsaLookupAuthenticationPackage failed, lsa auth pkg:%s error:%lx", lsa_pkg, ret);
 		goto done;
 	}
 
@@ -288,7 +288,7 @@ process_custom_lsa_auth(const char* user, const char* pwd, const char* lsa_pkg)
 	if ((ret = LsaLogonUser(lsa_handle, &origin_name, Network, auth_package_id,
 		logon_info, (ULONG)logon_info_size, NULL, &source_context,
 		(PVOID*)&profile, &profile_size, &logon_id, &token, &quotas, &subStatus)) != STATUS_SUCCESS) {
-		debug("%s: LsaLogonUser() failed: User '%s' Status: %08X SubStatus %d.", 
+		debug("%s: LsaLogonUser() failed: User '%s' Status: %08lX SubStatus %ld.", 
 			__FUNCTION__, user, ret, subStatus);
 		goto done;
 	}
@@ -433,7 +433,7 @@ load_user_profile(HANDLE user_token, char* user)
 	EnablePrivilege("SeBackupPrivilege", 1);
 	EnablePrivilege("SeRestorePrivilege", 1);
 	if (LoadUserProfileW(user_token, &profileInfo) == FALSE) {
-		debug3("%s: LoadUserProfileW() failed for user %S with error %lu.", __FUNCTION__, GetLastError());
+		debug3("%s: LoadUserProfileW() failed for user %s with error %lu.", __FUNCTION__, user, GetLastError());
 	}
 	EnablePrivilege("SeBackupPrivilege", 0);
 	EnablePrivilege("SeRestorePrivilege", 0);
@@ -491,13 +491,13 @@ add_sid_mapping_to_lsa(PUNICODE_STRING domain_name,
 				error("LsaManageSidNameMapping failed with : %s", LSAMappingErrorDetails[op_result]);
 		}
 		else
-			error("LsaManageSidNameMapping failed with ntstatus: %d", status);
+			error("LsaManageSidNameMapping failed with ntstatus: %ld", status);
 	}
 
 	if (p_output) {
 		status = pLsaFreeMemory(p_output);
 		if (status != STATUS_SUCCESS)
-			debug3("LsaFreeMemory failed with ntstatus: %d", status);
+			debug3("LsaFreeMemory failed with ntstatus: %ld", status);
 	}
 
 	return ret;
@@ -526,7 +526,7 @@ int remove_virtual_account_lsa_mapping(PUNICODE_STRING domain_name,
 	if (p_output) {
 		status = pLsaFreeMemory(p_output);
 		if (status != STATUS_SUCCESS)
-			debug3("LsaFreeMemory failed with ntstatus: %d", status);
+			debug3("LsaFreeMemory failed with ntstatus: %ld", status);
 	}
 	return ret;
 }
@@ -664,7 +664,7 @@ cleanup:
 	/* attempt to remove virtual account permissions if previous add succeeded */
 	if (lsa_add_ret == STATUS_SUCCESS)
 		if ((lsa_ret = pLsaRemoveAccountRights(lsa_policy, sid_user, FALSE, &svcLogonRight, 1)) != STATUS_SUCCESS)
-			debug("%s: unable to remove SE_SERVICE_LOGON_NAME privilege, error: %d", __FUNCTION__, pRtlNtStatusToDosError(lsa_ret));
+			debug("%s: unable to remove SE_SERVICE_LOGON_NAME privilege, error: %lu", __FUNCTION__, pRtlNtStatusToDosError(lsa_ret));
 
 	if (sid_domain)
 		FreeSid(sid_domain);

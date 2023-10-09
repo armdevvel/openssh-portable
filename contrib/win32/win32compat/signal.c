@@ -300,7 +300,7 @@ wait_for_any_event(HANDLE* events, int num_events, DWORD milli_seconds)
 		return 0;
 	} else { /* some other error*/
 		errno = EOTHER;
-		debug3("ERROR: unexpected wait end: %d", ret);
+		debug3("ERROR: unexpected wait end: %lu", ret);
 		return -1;
 	}
 

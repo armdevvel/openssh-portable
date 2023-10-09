@@ -151,7 +151,7 @@ setup_session_user_vars(wchar_t* profile_path)
 				free(error_message);
 			}
 			else
-				error("Unable to open Registry Key %s. %s", (j == 0 ? "HKEY_LOCAL_MACHINE" : "HKEY_CURRENT_USER"));
+				error("Unable to open Registry Key %s. No error message provided.", (j == 0 ? "HKEY_LOCAL_MACHINE" : "HKEY_CURRENT_USER"));
 			continue;
 		}
 		

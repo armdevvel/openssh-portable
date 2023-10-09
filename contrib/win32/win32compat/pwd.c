@@ -202,7 +202,7 @@ get_passwd(const wchar_t * user_utf16, PSID sid)
 		user_utf16_modified = _wcsdup(user_utf16);
 		if (!user_utf16_modified) {
 			errno = ENOMEM;
-			error("%s failed to duplicate %s", __func__, user_utf16);
+			error("%s failed to duplicate %ls", __func__, user_utf16);
 			goto cleanup;
 		}
 

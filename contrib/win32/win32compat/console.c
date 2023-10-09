@@ -196,7 +196,7 @@ ConEnterRawMode()
 		if (gcsbRet == 0)
 		{
 			dwRet = GetLastError();
-			error("GetConsoleScreenBufferInfo on GetConsoleOutputHandle() failed with %d", dwRet);
+			error("GetConsoleScreenBufferInfo on GetConsoleOutputHandle() failed with %lu", dwRet);
 			return;
 		}
 		SavedViewRect = csbi.srWindow;

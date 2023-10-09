@@ -422,7 +422,7 @@ socketio_recv(struct w32_io* pio, void *buf, size_t len, int flags)
 			return 0;
 		} else {
 			errno = errno_from_WSAError(pio->read_details.error);
-			debug3("recv - from CB ERROR:%d, io:%p", pio->read_details.error, pio);
+			debug3("recv - from CB ERROR:%lu, io:%p", pio->read_details.error, pio);
 			pio->read_details.error = 0;
 			return -1;
 		}
@@ -507,7 +507,7 @@ CALLBACK WSASendCompletionRoutine(IN DWORD dwError,
 	pio->write_details.error = dwError;
 	/* TODO - assert that remaining == cbTransferred */
 	if ((dwError == 0) && (pio->write_details.remaining != cbTransferred)) {
-		error("WSASendCB - ERROR: broken assumption, io:%p, sent:%d, remaining:%d", pio,
+		error("WSASendCB - ERROR: broken assumption, io:%p, sent:%lu, remaining:%lu", pio,
 			cbTransferred, pio->write_details.remaining);
 		debug_assert_internal();
 	}
@@ -554,7 +554,7 @@ socketio_send(struct w32_io* pio, const void *buf, size_t len, int flags)
 
 	if (pio->write_details.error) {
 		errno = errno_from_WSAError(pio->write_details.error);
-		debug3("ERROR:%d, io:%p", pio->write_details.error, pio);
+		debug3("ERROR:%lu, io:%p", pio->write_details.error, pio);
 		return -1;
 	}
 
@@ -707,7 +707,7 @@ socketio_accept(struct w32_io* pio, struct sockaddr* addr, int* addrlen)
 
 	if (pio->read_details.error) {
 		errno = errno_from_WSAError(pio->read_details.error);
-		debug3("accept - ERROR: async io completed with error: %d, io:%p", pio->read_details.error, pio);
+		debug3("accept - ERROR: async io completed with error: %lu, io:%p", pio->read_details.error, pio);
 		pio->read_details.error = 0;
 		goto on_error;
 	}
@@ -873,13 +873,13 @@ socketio_finish_connect(struct w32_io* pio)
 
 	if (pio->write_details.error) {
 		wsa_error = pio->write_details.error;
-		debug3("finish_connect - ERROR: async io completed with error: %d, io:%p", wsa_error, pio);
+		debug3("finish_connect - ERROR: async io completed with error: %lu, io:%p", wsa_error, pio);
 		goto done;
 	}
 
 	if (0 != setsockopt(pio->sock, SOL_SOCKET, SO_UPDATE_CONNECT_CONTEXT, NULL, 0)) {
 		wsa_error = WSAGetLastError();
-		debug3("finish_connect - ERROR: setsockopt failed:%d, io:%p", wsa_error, pio);
+		debug3("finish_connect - ERROR: setsockopt failed:%lu, io:%p", wsa_error, pio);
 		goto done;
 	}
 
