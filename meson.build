@@ -183,7 +183,7 @@ sftpsrc = files(
     'sftp-usergroup.c',
 )
 
-subdir('contrib/win32/win32compat/ssh-agent')
+subdir('contrib/win32/win32compat/ssh_agent')
 
 toolkit = [
     ['ssh-keygen', winmain + files(
