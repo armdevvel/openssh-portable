@@ -19,7 +19,7 @@ add_global_arguments('-DGSSAPI', language: 'c')
 # supply chain
 add_global_arguments('-DWITH_OPENSSL=1', language: 'c')
 
-# debugging
+# debugging (win32io)
 add_global_arguments('-DSTDERR_LOG_LEVEL=SYSLOG_LEVEL_INFO', language: 'c')
 
 # clutter
@@ -132,7 +132,6 @@ core_srcs_common = [
         'ssh-sk.c',
         'sshbuf-io.c',
         'cipher-chachapoly-libcrypto.c',
-        'contrib/win32/win32compat/spawn-ext.c',
         # mistakenly omitted from solution
         'utf8.c',
         'dispatch.c',

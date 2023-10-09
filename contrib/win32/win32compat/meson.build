@@ -19,6 +19,7 @@ win32iocompat_srcs = files(
     'tnnet.c',
     'utf.c',
     'spawn.c',
+    'spawn-ext.c', # "extern"ing vars defined in win32_usertoken_utils.c
     'signal_wait.c',
     'win32_pty.c',
     'gss-sspi.c',

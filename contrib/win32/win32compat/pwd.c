@@ -396,6 +396,31 @@ cleanup:
 	return ret;
 }
 
+/* The two below methods duplicate functionality provided by `libwusers` and
+   should go away once `libwusers` is reused by this compatibility layer.
+   The provided implementations are therefore intendedly trivialized. */
+
+char *get_principal_username() {
+	wchar_t tmp_name[PATH_MAX];
+	DWORD out_len = ExpandEnvironmentStringsW(L"%USERNAME%", tmp_name, PATH_MAX);
+	if(out_len && (out_len <= PATH_MAX)) {
+		return utf16_to_utf8(tmp_name);
+	}
+	return NULL;
+}
+
+char *get_effective_username() {
+	wchar_t tmp_name[PATH_MAX];
+	DWORD out_len = PATH_MAX;
+	if(GetUserNameExW(NameSamCompatible, tmp_name, &out_len)) {
+		wchar_t* bslsh = wcsrchr(tmp_name, L'\\'); // last '\\'
+		return utf16_to_utf8(bslsh ? bslsh + 1 : tmp_name);
+	}
+	return NULL;
+}
+
+/* TODO: the placeholders below should be filled by libwusers */
+
 char *
 group_from_gid(gid_t gid, int nogroup)
 {

@@ -43,6 +43,12 @@ struct passwd *getpwent(void);
 void endpwent(void);
 char *get_username(const PSID sid);
 
+/* The two below methods duplicate functionality provided by `libwusers` and
+   should go away once `libwusers` is reused by this compatibility layer.
+   NOTE: the caller must free() the returned char* pointer if it's nonzero. */
+char *get_principal_username();
+char *get_effective_username();
+
 #define getpwuid w32_getpwuid
 #define getpwnam w32_getpwnam
 #define getuid w32_getuid

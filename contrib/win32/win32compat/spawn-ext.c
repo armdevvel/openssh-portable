@@ -1,6 +1,8 @@
 #include <windows.h>
 #include <errno.h>
 #include "misc_internal.h"
+#include "inc/pwd.h"
+#include "inc/spawn.h"
 #include "unistd.h"
 #include "Debug.h"
 
@@ -26,8 +28,19 @@ __posix_spawn_asuser(pid_t *pidp, const char *path, const posix_spawn_file_actio
 		errno = EOTHER;
 		return -1;
 	}
-	if (strcmp(user, "sshd"))
+	else if (am_system()) {
 		load_user_profile(user_token, user);
+	}
+	else {
+		// last resort: drop user token is the requested user is ourselves
+		char* current_principal = get_principal_username();
+		if(current_principal) {
+			if(!strcmp(user, current_principal)) {
+				user_token = NULL;
+			}
+			free(current_principal);
+		}
+	}
 	
 	r = posix_spawn_internal(pidp, path, file_actions, attrp, argv, envp, user_token, TRUE);
 	CloseHandle(user_token);
