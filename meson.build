@@ -125,7 +125,6 @@ core_srcs_common = [
         'platform.c',
         'sandbox-pledge.c',
         'contrib/win32/win32compat/ttymodes_windows.c', #  etc. push down
-        'contrib/win32/win32compat/w32-sshfileperm.c',
         'kexgexs.c',
         'ssh-ecdsa-sk.c',
         'ssh-ed25519-sk.c',
