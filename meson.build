@@ -27,6 +27,7 @@ add_global_arguments('-Wno-comment', language: 'c')
 add_global_arguments('-Wno-parentheses', language: 'c')
 add_global_arguments('-Wno-unused-variable', language: 'c')
 add_global_arguments('-Wno-pointer-sign', language: 'c')
+add_global_arguments('-Wno-deprecated-declarations', language: 'c')
 
 # common includes: config.h, sshTelemetry.h (dumbed)
 common_header_dir = 'contrib/win32/openssh'
