@@ -205,8 +205,10 @@ setup_session_user_vars(wchar_t* profile_path)
 			}
 
 			/* Path is a special case. The System Path value is preppended to the User Path value */
-			if (_wcsicmp(name, L"PATH") == 0 && j == 1) {
-				if ((required = GetEnvironmentVariableW(L"PATH", NULL, 0)) != 0) {
+			if (_wcsicmp(name, L"PATH") == 0) { /* DONTMERGE */
+				if(j == 0) { /* system path -- HKLM */
+					to_apply = NULL; /* DONTMERGE keep current SSHD path as if it were system path */
+				} else if ((required = GetEnvironmentVariableW(L"PATH", NULL, 0)) != 0) { /* user path -- HKCU */
 					size_t user_path_size = wcslen(to_apply) + 1;
 					path_value = xmalloc((required + user_path_size) * 2);
 					GetEnvironmentVariableW(L"PATH", path_value, required);
